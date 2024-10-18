@@ -1,0 +1,35 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Estilos personalizados para los toasts */
+.toast-success {
+  background-color: #28a745 !important; /* Cambia el color de fondo */
+  color: #fff !important; /* Cambia el color del texto */
+  font-size: 16px !important; /* Cambia el tamaño de la fuente */
+  border-radius: 8px !important; /* Añade bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; /* Añade sombra */
+}
+
+.toast-error {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+  font-size: 16px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Estilos personalizados para los toasts */
+.toast-alert {
+  background-color: #ffcc00 !important; /* Color de fondo amarillo */
+  color: #333 !important; /* Color del texto */
+  font-size: 16px !important; /* Tamaño de la fuente */
+  border-radius: 8px !important; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; /* Sombra */
+  padding: 15px !important; /* Espaciado interno */
+  display: flex;
+  align-items: center;
+}
+
+.toast-alert .toast-icon {
+  margin-right: 10px;
+  font-size: 20px;
+}

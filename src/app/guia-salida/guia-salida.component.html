@@ -1,42 +1,44 @@
 <div class="container mt-4">
-  <div class="card shadow-lg">
-    <div class="card-header bg-primary text-white">
+  <div class="card shadow-lg rounded">
+    <div class="card-header" style="background-color: #28a745; color: white;">
       <h2>Guía de Salida</h2>
     </div>
     <div class="card-body">
-      <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#createGuiaModal">Crear Guía de Salida</button>
-      <table class="table table-hover table-bordered mt-3">
-        <thead class="thead-dark">
-          <tr>
-            <th>Bodega</th>
-            <th>Número de Guía</th>
-            <th>Concepto</th>
-            <th>Fecha</th>
-            <th>Descripción</th>
-            <th>Tipo de Transacción</th>
-            <th>Bodega Destino</th>
-            <th>Centro de Costo</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let entry of guiasSalida; let i = index" [ngClass]="{'table-success': i % 2 === 0, 'table-light': i % 2 !== 0}">
-            <td>{{ entry.bodega }}</td>
-            <td>
-              <a href="#" (click)="openDetailModal(entry)" data-toggle="modal" data-target="#detailGuiaModal">{{ entry.numeroGuia }}</a>
-            </td>
-            <td>{{ entry.concepto }}</td>
-            <td>{{ entry.fecha }}</td>
-            <td>{{ entry.descripcion }}</td>
-            <td>{{ entry.tipoTransaccion }}</td>
-            <td>{{ entry.bodegaDestino }}</td>
-            <td>{{ entry.centroCosto }}</td>
-            <td>
-              <button (click)="removeEntry(i)" class="btn btn-danger btn-sm">Eliminar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <button class="btn btn-primary mb-3" data-toggle="modal" style="background-color: grey;" data-target="#createGuiaModal">Crear Guía de Salida</button>
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered mt-3">
+          <thead class="thead-">
+            <tr>
+              <th>Bodega</th>
+              <th>Número de Guía</th>
+              <th>Concepto</th>
+              <th>Fecha</th>
+              <th>Descripción</th>
+              <th>Tipo de Transacción</th>
+              <th>Bodega Destino</th>
+              <th>Centro de Costo</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entry of guiasSalida; let i = index" [ngClass]="{'table-success': i % 2 === 0, 'table-light': i % 2 !== 0}">
+              <td>{{ entry.bodega }}</td>
+              <td>
+                <a href="#" (click)="openDetailModal(entry)" data-toggle="modal" data-target="#detailGuiaModal">{{ entry.numeroGuia }}</a>
+              </td>
+              <td>{{ entry.concepto }}</td>
+              <td>{{ entry.fecha }}</td>
+              <td>{{ entry.descripcion }}</td>
+              <td>{{ entry.tipoTransaccion }}</td>
+              <td>{{ entry.bodegaDestino }}</td>
+              <td>{{ entry.centroCosto }}</td>
+              <td>
+                <button (click)="removeEntry(i)" class="btn btn-danger btn-sm">Eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
@@ -44,9 +46,9 @@
 <!-- Modal for Creating -->
 <div class="modal fade" id="createGuiaModal" tabindex="-1" role="dialog" aria-labelledby="createGuiaModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
+    <div class="modal-content border-with-title rounded">
       <div class="modal-header">
-        <h5 class="modal-title" id="createGuiaModalLabel">Crear Guía de Salida</h5>
+        <h5 class="modal-title text-center" id="createGuiaModalLabel">Crear Guía de Salida</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -55,65 +57,74 @@
         <form (ngSubmit)="addEntry()" class="form">
           <div class="row">
             <div class="col-md-6">
-              <div class="form-group mb-2">
-                <label>Documento Electrónico</label>
-                <div>
-                  <label class="radio-inline">
-                    <input type="radio" name="documentoElectronico" value="si" disabled> Sí
-                    <input type="radio" name="documentoElectronico" value="no" checked disabled> No
-                  </label>
+              <div class="form-group mb-2 border p-3 rounded">
+                <div class="form-group mb-2">
+                  <label>Documento Electrónico</label>
+                  <div>
+                    <label class="radio-inline">
+                      <input type="radio" name="documentoElectronico" value="si" disabled> Sí
+                      <input type="radio" name="documentoElectronico" value="no" checked disabled> No
+                    </label>
+                  </div>
                 </div>
-              </div>
-              <div class="form-group mb-2">
-                <label for="bodega">Bodega</label>
-                <select [(ngModel)]="newEntry.bodega" class="form-control" id="bodega" name="bodega" required>
-                  <option *ngFor="let bodega of bodegas" [value]="bodega">{{ bodega }}</option>
-                </select>
-              </div>
-              <div class="form-group mb-2">
-                <label for="numeroGuia">Número de Guía de Salida</label>
-                <input type="text" [(ngModel)]="newEntry.numeroGuia" class="form-control" id="numeroGuia" name="numeroGuia" required>
-              </div>
-              <div class="form-group mb-2">
-                <label for="concepto">Concepto</label>
-                <input type="text" [(ngModel)]="newEntry.concepto" class="form-control" id="concepto" name="concepto" [disabled]="true" required>
-              </div>
-              <div class="form-group mb-2">
-                <label for="fecha">Fecha</label>
-                <input type="date" [(ngModel)]="newEntry.fecha" class="form-control" id="fecha" name="fecha" required>
-              </div>
-              <div class="form-group mb-2">
-                <label for="tipoTraslado">Tipo de Traslado</label>
-                <input type="text" [(ngModel)]="newEntry.tipoTraslado" class="form-control" id="tipoTraslado" name="tipoTraslado" [disabled]="true" required>
-              </div>
-              <div class="form-group mb-2">
-                <label for="estado">Estado</label>
-                <input type="text" [(ngModel)]="newEntry.estado" class="form-control" id="estado" name="estado" [disabled]="true" required>
-              </div>
-              <div class="form-group mb-2">
-                <label for="descripcion">Descripción</label>
-                <textarea [(ngModel)]="newEntry.descripcion" class="form-control" id="descripcion" name="descripcion"></textarea>
-              </div>
-              <div class="form-group mb-2">
-                <label for="tipoTransaccion">Tipo de Transacción</label>
-                <select [(ngModel)]="newEntry.tipoTransaccion" class="form-control" id="tipoTransaccion" name="tipoTransaccion" required>
-                  <option *ngFor="let tipo of tiposTransaccion" [value]="tipo">{{ tipo }}</option>
-                </select>
+                <div class="form-group mb-2">
+                  <label for="bodega">Bodega</label>
+                  <select [(ngModel)]="newEntry.bodega" class="form-control" id="bodega" name="bodega" required>
+                    <option *ngFor="let bodega of bodegas" [value]="bodega">{{ bodega }}</option>
+                  </select>
+                </div>
+                <div class="form-group mb-2">
+                  <label for="numeroGuia">Número de Guía de Salida</label>
+                  <div class="d-flex">
+                    <input type="text" [(ngModel)]="newEntry.numeroGuia" class="form-control form-control-sm w-75" id="numeroGuia" name="numeroGuia" required>
+                    <button class="btn btn-primary btn-sm ml-2" type="button">Folios</button>
+                  </div>
+                </div>
+                <div class="form-group mb-2">
+                  <label for="concepto">Concepto</label>
+                  <input type="text" [(ngModel)]="newEntry.concepto" class="form-control" id="concepto" name="concepto" [disabled]="true" required>
+                </div>
+                <div class="form-group mb-2 d-flex">
+                  <div class="w-50 mr-2">
+                    <label for="fecha">Fecha</label>
+                    <input type="date" [(ngModel)]="newEntry.fecha" class="form-control form-control-sm" id="fecha" name="fecha" required>
+                  </div>
+                  <div class="w-50">
+                    <label for="tipoTraslado">Tipo de Traslado</label>
+                    <input type="text" [(ngModel)]="newEntry.tipoTraslado" class="form-control form-control-sm" id="tipoTraslado" name="tipoTraslado" [disabled]="true" required>
+                  </div>
+                </div>
+                <div class="form-group mb-2 w-50">
+                  <label for="estado">Estado</label>
+                  <input type="text" [(ngModel)]="newEntry.estado" class="form-control" id="estado" name="estado" [disabled]="true" required>
+                </div>
+                <div class="form-group mb-2">
+                  <label for="tipoTransaccion">Tipo de Transacción</label>
+                  <select [(ngModel)]="newEntry.tipoTransaccion" class="form-control form-control-sm w-50" id="tipoTransaccion" name="tipoTransaccion" required>
+                    <option *ngFor="let tipo of tiposTransaccion" [value]="tipo">{{ tipo }}</option>
+                  </select>
+                </div>
+                <div class="form-group mb-2">
+                  <label for="descripcion">Descripción</label>
+                  <textarea [(ngModel)]="newEntry.descripcion" class="form-control" id="descripcion" name="descripcion"></textarea>
+                </div>
+                
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group mb-2">
+            <div class="col-md-6 d-flex flex-column justify-content-between">
+              <div class="form-group mb-2 border p-2 rounded">
                 <label for="bodegaDestino">Bodega Destino</label>
                 <select [(ngModel)]="newEntry.bodegaDestino" class="form-control" id="bodegaDestino" name="bodegaDestino" required>
                   <option *ngFor="let bodega of bodegas" [value]="bodega">{{ bodega }}</option>
                 </select>
               </div>
-              <div class="form-group mb-2">
+              <div class="form-group mb-2 border p-2 rounded mt-auto">
                 <label for="centroCosto">Centro de Costo</label>
                 <input type="text" [(ngModel)]="newEntry.centroCosto" class="form-control" id="centroCosto" name="centroCosto" required>
               </div>
             </div>
           </div>
+          
           <div class="form-group mb-2">
             <label for="productos">Productos</label>
             <table class="table table-bordered mb-2">
@@ -160,7 +171,7 @@
 <!-- Modal for Details -->
 <div class="modal fade" id="detailGuiaModal" tabindex="-1" role="dialog" aria-labelledby="detailGuiaModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <div class="modal-content rounded">
       <div class="modal-header">
         <h5 class="modal-title" id="detailGuiaModalLabel">Detalles de la Guía de Salida</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -201,7 +212,7 @@
 </div>
 <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <div class="modal-content rounded">
       <div class="modal-header">
         <h5 class="modal-title" id="addProductModalLabel">Agregar Producto</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">

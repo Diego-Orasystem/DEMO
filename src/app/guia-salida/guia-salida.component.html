@@ -43,7 +43,7 @@
 
 <!-- Modal for Creating -->
 <div class="modal fade" id="createGuiaModal" tabindex="-1" role="dialog" aria-labelledby="createGuiaModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document"> <!-- Changed to modal-xl for an even larger modal -->
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="createGuiaModalLabel">Crear Guía de Salida</h5>
@@ -53,66 +53,65 @@
       </div>
       <div class="modal-body">
         <form (ngSubmit)="addEntry()" class="form">
-        <div class="row">
-          <div class="col-md-9">
-            <div class="form-group mb-2">
-              <label>Documento Electrónico</label>
-            <div>
-              <label class="radio-inline">
-                <input type="radio" name="documentoElectronico" value="si" disabled> Sí
-                <input type="radio" name="documentoElectronico" value="no" checked disabled> No
-              </label>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group mb-2">
+                <label>Documento Electrónico</label>
+                <div>
+                  <label class="radio-inline">
+                    <input type="radio" name="documentoElectronico" value="si" disabled> Sí
+                    <input type="radio" name="documentoElectronico" value="no" checked disabled> No
+                  </label>
+                </div>
+              </div>
+              <div class="form-group mb-2">
+                <label for="bodega">Bodega</label>
+                <select [(ngModel)]="newEntry.bodega" class="form-control" id="bodega" name="bodega" required>
+                  <option *ngFor="let bodega of bodegas" [value]="bodega">{{ bodega }}</option>
+                </select>
+              </div>
+              <div class="form-group mb-2">
+                <label for="numeroGuia">Número de Guía de Salida</label>
+                <input type="text" [(ngModel)]="newEntry.numeroGuia" class="form-control" id="numeroGuia" name="numeroGuia" required>
+              </div>
+              <div class="form-group mb-2">
+                <label for="concepto">Concepto</label>
+                <input type="text" [(ngModel)]="newEntry.concepto" class="form-control" id="concepto" name="concepto" [disabled]="true" required>
+              </div>
+              <div class="form-group mb-2">
+                <label for="fecha">Fecha</label>
+                <input type="date" [(ngModel)]="newEntry.fecha" class="form-control" id="fecha" name="fecha" required>
+              </div>
+              <div class="form-group mb-2">
+                <label for="tipoTraslado">Tipo de Traslado</label>
+                <input type="text" [(ngModel)]="newEntry.tipoTraslado" class="form-control" id="tipoTraslado" name="tipoTraslado" [disabled]="true" required>
+              </div>
+              <div class="form-group mb-2">
+                <label for="estado">Estado</label>
+                <input type="text" [(ngModel)]="newEntry.estado" class="form-control" id="estado" name="estado" [disabled]="true" required>
+              </div>
+              <div class="form-group mb-2">
+                <label for="descripcion">Descripción</label>
+                <textarea [(ngModel)]="newEntry.descripcion" class="form-control" id="descripcion" name="descripcion"></textarea>
+              </div>
+              <div class="form-group mb-2">
+                <label for="tipoTransaccion">Tipo de Transacción</label>
+                <select [(ngModel)]="newEntry.tipoTransaccion" class="form-control" id="tipoTransaccion" name="tipoTransaccion" required>
+                  <option *ngFor="let tipo of tiposTransaccion" [value]="tipo">{{ tipo }}</option>
+                </select>
+              </div>
             </div>
-          </div>
-          <div class="form-group mb-2">
-            <label for="bodega">Bodega</label>
-            <select [(ngModel)]="newEntry.bodega" class="form-control" id="bodega" name="bodega" required>
-              <option *ngFor="let bodega of bodegas" [value]="bodega">{{ bodega }}</option>
-            </select>
-          </div>
-          <div class="form-group mb-2">
-            <label for="numeroGuia">Número de Guía de Salida</label>
-            <input type="text" [(ngModel)]="newEntry.numeroGuia" class="form-control" id="numeroGuia" name="numeroGuia" required>
-          </div>
-          <div class="form-group mb-2">
-            <label for="concepto">Concepto</label>
-            <input type="text" [(ngModel)]="newEntry.concepto" class="form-control" id="concepto" name="concepto" [disabled]="true" required>
-          </div>
-          <div class="form-group mb-2">
-            <label for="fecha">Fecha</label>
-            <input type="date" [(ngModel)]="newEntry.fecha" class="form-control" id="fecha" name="fecha" required>
-          </div>
-          <div class="form-group mb-2">
-            <label for="tipoTraslado">Tipo de Traslado</label>
-            <input type="text" [(ngModel)]="newEntry.tipoTraslado" class="form-control" id="tipoTraslado" name="tipoTraslado" [disabled]="true" required>
-          </div>
-          <div class="form-group mb-2">
-            <label for="estado">Estado</label>
-            <input type="text" [(ngModel)]="newEntry.estado" class="form-control" id="estado" name="estado" [disabled]="true" required>
-          </div>
-          <div class="form-group mb-2">
-            <label for="descripcion">Descripción</label>
-            <textarea [(ngModel)]="newEntry.descripcion" class="form-control" id="descripcion" name="descripcion" required></textarea>
-          </div>
-          <div class="form-group mb-2">
-            <label for="tipoTransaccion">Tipo de Transacción</label>
-            <select [(ngModel)]="newEntry.tipoTransaccion" class="form-control" id="tipoTransaccion" name="tipoTransaccion" required>
-              <option *ngFor="let tipo of tiposTransaccion" [value]="tipo">{{ tipo }}</option>
-            </select>
-          </div>
-        
-          <div class="form-group mb-2">
-            <label for="bodegaDestino">Bodega Destino</label>
-            <select [(ngModel)]="newEntry.bodegaDestino" class="form-control" id="bodegaDestino" name="bodegaDestino" required>
-              <option *ngFor="let bodega of bodegas" [value]="bodega">{{ bodega }}</option>
-            </select>
-          </div>
-          
-          </div>
-          <div class="col-md-3">
-            <div class="form-group mb-2">
+            <div class="col-md-6">
+              <div class="form-group mb-2">
+                <label for="bodegaDestino">Bodega Destino</label>
+                <select [(ngModel)]="newEntry.bodegaDestino" class="form-control" id="bodegaDestino" name="bodegaDestino" required>
+                  <option *ngFor="let bodega of bodegas" [value]="bodega">{{ bodega }}</option>
+                </select>
+              </div>
+              <div class="form-group mb-2">
                 <label for="centroCosto">Centro de Costo</label>
                 <input type="text" [(ngModel)]="newEntry.centroCosto" class="form-control" id="centroCosto" name="centroCosto" required>
+              </div>
             </div>
           </div>
           <div class="form-group mb-2">
@@ -151,8 +150,7 @@
             </table>
             <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#addProductModal">Agregar Producto desde Modal</button>
           </div>
-            <button type="submit" class="btn btn-success mb-2">Agregar</button>
-          </div>
+          <button type="submit" class="btn btn-success mb-2">Agregar</button>
         </form>
       </div>
     </div>

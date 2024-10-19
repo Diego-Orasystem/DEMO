@@ -1,50 +1,53 @@
 <div class="container mt-4">
-  <div class="card shadow-lg">
-    <div class="card-header bg-primary text-white">
+  <div class="card shadow-lg rounded">
+    <div class="card-header" style="background-color: #28a745; color: white;">
       <h2>Guía de Entrada</h2>
     </div>
     <div class="card-body">
-      <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#createGuiaModal">Crear Guía de Entrada</button>
-      <table class="table table-hover table-bordered mt-3">
-        <thead class="thead-dark">
-          <tr>
-            <th>Número de Traspaso</th>
-            <th>Número de Guía</th> 
-            <th>Bodega</th>
-            <th>Concepto</th>
-            <th>Fecha</th>
-            <th>Descripción</th>
-            <th>Bodega Destino</th>
-            <th>Centro de Costo</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let entry of guiasEntrada; let i = index">
-            <td>{{ entry.numeroTraspaso }}</td>
-            <td>
-                <a href="#" (click)="openDetailModal(entry)" data-toggle="modal" data-target="#detailGuiaModal">{{ entry.numeroGuia }}</a>
-            </td>
-            <td>{{ entry.bodega }}</td>
-            <td>{{ entry.concepto }}</td>
-            <td>{{ entry.fecha }}</td>
-            <td>{{ entry.descripcion }}</td>
-            <td>{{ entry.bodegaDestino }}</td>
-            <td>{{ entry.centroCosto }}</td>
-            <td>
-              <button (click)="removeEntry(i)" class="btn btn-danger btn-sm">Eliminar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <button class="btn btn-primary mb-3" data-toggle="modal" style="background-color: grey;" data-target="#createGuiaModal">Crear Guía de Entrada</button>
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered mt-3">
+          <thead class="thead-">
+            <tr>
+              <th>Número de Traspaso</th>
+              <th>Número de Guía</th> 
+              <th>Bodega</th>
+              <th>Concepto</th>
+              <th>Fecha</th>
+              <th>Descripción</th>
+              <th>Bodega Destino</th>
+              <th>Centro de Costo</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entry of guiasEntrada; let i = index">
+              <td>{{ entry.numeroTraspaso }}</td>
+              <td>
+                  <a href="#" (click)="openDetailModal(entry)" data-toggle="modal" data-target="#detailGuiaModal">{{ entry.numeroGuia }}</a>
+              </td>
+              <td>{{ entry.bodega }}</td>
+              <td>{{ entry.concepto }}</td>
+              <td>{{ entry.fecha }}</td>
+              <td>{{ entry.descripcion }}</td>
+              <td>{{ entry.bodegaDestino }}</td>
+              <td>{{ entry.centroCosto }}</td>
+              <td>
+                <button (click)="removeEntry(i)" class="btn btn-danger btn-sm">Eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
+<!-- Modal for Creating -->
 <div class="modal fade" id="createGuiaModal" tabindex="-1" role="dialog" aria-labelledby="createGuiaModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
+    <div class="modal-content border-with-title rounded" style="border: 2px solid green;">
       <div class="modal-header">
-        <h5 class="modal-title" id="createGuiaModalLabel">Crear Guía de Entrada</h5>
+        <h5 class="modal-title text-center" id="createGuiaModalLabel">Crear Guía de Entrada</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -90,21 +93,22 @@
                 <textarea [(ngModel)]="newEntry.descripcion" class="form-control" id="descripcion" name="descripcion"></textarea>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group mb-2">
+            <div class="col-md-6 d-flex flex-column justify-content-between">
+              <div class="form-group mb-2 border p-2 rounded">
                 <label for="bodegaDestino">Bodega Destino</label>
                 <select [(ngModel)]="newEntry.bodegaDestino" class="form-control" id="bodegaDestino" name="bodegaDestino" required>
                   <option *ngFor="let bodega of bodegas" [value]="bodega">{{ bodega }}</option>
                 </select>
               </div>
-              <div class="form-group mb-2">
+              <div class="form-group mb-2 border p-2 rounded mt-auto">
                 <label for="centroCosto">Centro de Costo</label>
                 <input type="text" [(ngModel)]="newEntry.centroCosto" class="form-control" id="centroCosto" name="centroCosto" required>
               </div>
             </div>
           </div>
           <div class="form-group mb-2">
-            <label for="productos">Productos</label>
+            
+            <h2 for="productos">Productos</h2>
             <table class="table table-bordered mb-2">
               <thead>
                 <tr>
@@ -146,7 +150,7 @@
 
 <!-- Modal for Details -->
 <div class="modal fade" id="detailGuiaModal" tabindex="-1" role="dialog" aria-labelledby="detailGuiaModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="detailGuiaModalLabel">Detalles de la Guía de Salida</h5>
@@ -155,17 +159,41 @@
           </button>
         </div>
         <div class="modal-body">
-          <p><strong>Bodega:</strong> {{ selectedEntry?.bodega }}</p>
-          <p><strong>Número de Guía:</strong> {{ selectedEntry?.numeroGuia }}</p>
-          <p><strong>Concepto:</strong> {{ selectedEntry?.concepto }}</p>
-          <p><strong>Fecha:</strong> {{ selectedEntry?.fecha }}</p>
-          <p><strong>Descripción:</strong> {{ selectedEntry?.descripcion }}</p>
-          <p><strong>Tipo de Transacción:</strong> {{ selectedEntry?.tipoTransaccion }}</p>
-          <p><strong>Bodega Destino:</strong> {{ selectedEntry?.bodegaDestino }}</p>
-          <p><strong>Centro de Costo:</strong> {{ selectedEntry?.centroCosto }}</p>
-          <h5>Productos:</h5>
-          <table class="table table-bordered">
-            <thead>
+          <div class="container">
+            <div class="row">
+              <div class="col-md-4">
+                <p><strong>Bodega:</strong> {{ selectedEntry?.bodega }}</p>
+              </div>
+              <div class="col-md-4">
+                <p><strong>Número de Guía:</strong> {{ selectedEntry?.numeroGuia }}</p>
+              </div>
+              <div class="col-md-4">
+                <p><strong>Concepto:</strong> {{ selectedEntry?.concepto }}</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <p><strong>Fecha:</strong> {{ selectedEntry?.fecha }}</p>
+              </div>
+              <div class="col-md-4">
+                <p><strong>Descripción:</strong> {{ selectedEntry?.descripcion }}</p>
+              </div>
+              <div class="col-md-4">
+                <p><strong>Tipo de Transacción:</strong> {{ selectedEntry?.tipoTransaccion }}</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <p><strong>Bodega Destino:</strong> {{ selectedEntry?.bodegaDestino }}</p>
+              </div>
+              <div class="col-md-4">
+                <p><strong>Centro de Costo:</strong> {{ selectedEntry?.centroCosto }}</p>
+              </div>
+            </div>
+          </div>
+          <br>
+          <table class="table table-hover table-striped table-bordered">
+            <thead class="thead-dark" style="background-color: green;">
               <tr>
                 <th>Producto</th>
                 <th>Cantidad</th>

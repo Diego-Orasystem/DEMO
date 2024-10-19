@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr'; // Import ToastrService
 })
 export class GuiaEntradaComponent implements OnInit {
   guiasEntrada: { bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
+  guiasSalida: { bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
   newEntry = {
     bodega: '',
     numeroGuia: '',
@@ -15,9 +16,11 @@ export class GuiaEntradaComponent implements OnInit {
     fecha: new Date().toISOString().split('T')[0],
     descripcion: '',
     tipoTransaccion: '',
+    estado: 'Vigente',
+    tipoTraslado: 'Traslados Internos',
     bodegaDestino: '',
     centroCosto: '',
-    productos: [] as { nombre: string; cantidad: number; descripcion: string; }[] // Explicitly define the type
+    productos: [] as { nombre: string; cantidad: number; descripcion: string; precioUnitario: string; Total: string; }[] // Explicitly define the type
   };
   bodegas: string[] = [];
   selectedEntry: {
@@ -25,23 +28,27 @@ export class GuiaEntradaComponent implements OnInit {
     numeroGuia: string;
     concepto: string;
     fecha: string;
+    estado: string;
     descripcion: string;
     tipoTransaccion: string;
+    tipoTraslado: string;
     bodegaDestino: string;
     centroCosto: string;
     productos: any[];
   } | null = null;
   productos: string[] = ['Escalera', 'Cable', 'Foco']; // Example product list
-
+  tiposTransaccion: string[] = [];
   constructor(private toastr: ToastrService) {} // Inject ToastrService
 
   ngOnInit() {
     this.loadEntries();
     this.loadBodegas();
+    this.loadTiposTransaccion();
+    this.loadGuiasSalida();
   }
 
   addProduct() {
-    this.newEntry.productos.push({ nombre: '', cantidad: 0, descripcion: '' });
+    this.newEntry.productos.push({ nombre: '', cantidad: 0, descripcion: '', precioUnitario: '', Total: '' });
   }
 
   removeProduct(index: number) {
@@ -56,11 +63,13 @@ export class GuiaEntradaComponent implements OnInit {
         numeroGuia: '',
         concepto: 'Traspasos entre bodegas',
         fecha: '',
+        estado: 'Vigente',
         descripcion: '',
         tipoTransaccion: '',
+        tipoTraslado: 'Traslados Internos',
         bodegaDestino: '',
         centroCosto: '',
-        productos: [] as { nombre: string; cantidad: number; descripcion: string; }[] // Explicitly define the type
+        productos: [] as { nombre: string; cantidad: number; descripcion: string; precioUnitario: string; Total: string; }[] // Explicitly define the type
       };
       this.saveEntries();
       this.toastr.success('Guía de entrada agregada exitosamente!');
@@ -89,8 +98,23 @@ export class GuiaEntradaComponent implements OnInit {
     }
   }
 
+  loadTiposTransaccion() { // New method to load tiposTransaccion
+    const storedTiposTransaccion = localStorage.getItem('tiposTransaccion');
+    console.log(storedTiposTransaccion);
+    if (storedTiposTransaccion) {
+      this.tiposTransaccion = JSON.parse(storedTiposTransaccion).map((tipo: { cod: string, des: string }) => tipo.cod + ' - ' + tipo.des);
+    }
+  }
+
   saveEntries() {
     localStorage.setItem('guiasEntrada', JSON.stringify(this.guiasEntrada));
+  }
+
+  loadGuiasSalida() {
+    const storedGuiasSalida = localStorage.getItem('guiasSalida');
+    if (storedGuiasSalida) {
+      this.guiasSalida = JSON.parse(storedGuiasSalida);
+    }
   }
 
   showAlertToast() {

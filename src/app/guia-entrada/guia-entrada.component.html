@@ -40,10 +40,8 @@
     </div>
   </div>
 </div>
-
-<!-- Modal for Creating -->
 <div class="modal fade" id="createGuiaModal" tabindex="-1" role="dialog" aria-labelledby="createGuiaModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="createGuiaModalLabel">Crear Guía de Entrada</h5>
@@ -53,53 +51,95 @@
       </div>
       <div class="modal-body">
         <form (ngSubmit)="addEntry()" class="form">
-          <div class="form-group mb-2">
-            <label for="bodega">Bodega</label>
-            <select [(ngModel)]="newEntry.bodega" class="form-control" id="bodega" name="bodega" required>
-              <option *ngFor="let bodega of bodegas" [value]="bodega">{{ bodega }}</option>
-            </select>
-          </div>
-          <div class="form-group mb-2">
-            <label for="numeroGuia">Número de Guía de Entrada</label>
-            <input type="text" [(ngModel)]="newEntry.numeroGuia" class="form-control" id="numeroGuia" name="numeroGuia" required>
-          </div>
-          <div class="form-group mb-2">
-            <label for="concepto">Concepto</label>
-            <input type="text" [(ngModel)]="newEntry.concepto" class="form-control" id="concepto" name="concepto" disabled required>
-          </div>
-          <div class="form-group mb-2">
-            <label for="fecha">Fecha</label>
-            <input type="date" [(ngModel)]="newEntry.fecha" class="form-control" id="fecha" name="fecha" required>
-          </div>
-          <div class="form-group mb-2">
-            <label for="descripcion">Descripción</label>
-            <textarea [(ngModel)]="newEntry.descripcion" class="form-control" id="descripcion" name="descripcion" required></textarea>
-          </div>
-          <div class="form-group mb-2">
-            <label for="tipoTransaccion">Tipo de Transacción</label>
-            <input type="text" [(ngModel)]="newEntry.tipoTransaccion" class="form-control" id="tipoTransaccion" name="tipoTransaccion" required>
-          </div>
-          <div class="form-group mb-2">
-            <label for="bodegaDestino">Bodega Destino</label>
-            <select [(ngModel)]="newEntry.bodegaDestino" class="form-control" id="bodegaDestino" name="bodegaDestino" required>
-              <option *ngFor="let bodega of bodegas" [value]="bodega">{{ bodega }}</option>
-            </select>
-          </div>
-          <div class="form-group mb-2">
-            <label for="centroCosto">Centro de Costo</label>
-            <input type="text" [(ngModel)]="newEntry.centroCosto" class="form-control" id="centroCosto" name="centroCosto" required>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group mb-2">
+                <label for="bodega">Bodega</label>
+                <select [(ngModel)]="newEntry.bodega" class="form-control" id="bodega" name="bodega" required>
+                  <option *ngFor="let bodega of bodegas" [value]="bodega">{{ bodega }}</option>
+                </select>
+              </div>
+              <div class="form-group mb-2">
+                <label for="numeroGuia">Número de Guía de Salida</label>
+                <select [(ngModel)]="newEntry.numeroGuia" class="form-control" id="numeroGuia" name="numeroGuia" required>
+                  <option *ngFor="let guia of guiasSalida" [value]="guia.numeroGuia">{{ guia.numeroGuia + ' - ' + guia.bodega }}</option>
+                </select>
+              </div>
+              <div class="form-group mb-2">
+                <label for="concepto">Concepto</label>
+                <input type="text" [(ngModel)]="newEntry.concepto" class="form-control" id="concepto" name="concepto" [disabled]="true" required>
+              </div>
+              <div class="form-group mb-2">
+                <label for="fecha">Fecha</label>
+                <input type="date" [(ngModel)]="newEntry.fecha" class="form-control" id="fecha" name="fecha" required>
+              </div>
+              <div class="form-group mb-2">
+                <label for="tipoTraslado">Tipo de Traslado</label>
+                <input type="text" [(ngModel)]="newEntry.tipoTraslado" class="form-control" id="tipoTraslado" name="tipoTraslado" [disabled]="true" required>
+              </div>
+              <div class="form-group mb-2">
+                <label for="estado">Estado</label>
+                <input type="text" [(ngModel)]="newEntry.estado" class="form-control" id="estado" name="estado" [disabled]="true" required>
+              </div>
+              <div class="form-group mb-2">
+                <label for="descripcion">Descripción</label>
+                <textarea [(ngModel)]="newEntry.descripcion" class="form-control" id="descripcion" name="descripcion"></textarea>
+              </div>
+              <div class="form-group mb-2">
+                <label for="tipoTransaccion">Tipo de Transacción</label>
+                <select [(ngModel)]="newEntry.tipoTransaccion" class="form-control" id="tipoTransaccion" name="tipoTransaccion" required>
+                  <option *ngFor="let tipo of tiposTransaccion" [value]="tipo">{{ tipo }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group mb-2">
+                <label for="bodegaDestino">Bodega Destino</label>
+                <select [(ngModel)]="newEntry.bodegaDestino" class="form-control" id="bodegaDestino" name="bodegaDestino" required>
+                  <option *ngFor="let bodega of bodegas" [value]="bodega">{{ bodega }}</option>
+                </select>
+              </div>
+              <div class="form-group mb-2">
+                <label for="centroCosto">Centro de Costo</label>
+                <input type="text" [(ngModel)]="newEntry.centroCosto" class="form-control" id="centroCosto" name="centroCosto" required>
+              </div>
+            </div>
           </div>
           <div class="form-group mb-2">
             <label for="productos">Productos</label>
-            <div *ngFor="let product of newEntry.productos; let i = index" class="mb-2">
-              <select [(ngModel)]="product.nombre" class="form-control mb-1" name="producto-{{i}}" required>
-                <option *ngFor="let producto of productos" [value]="producto">{{ producto }}</option>
-              </select>
-              <input type="number" [(ngModel)]="product.cantidad" class="form-control mb-1" placeholder="Cantidad" name="cantidad-{{i}}" required>
-              <input type="text" [(ngModel)]="product.descripcion" class="form-control mb-1" placeholder="Descripción" name="descripcion-{{i}}" required>
-              <button type="button" class="btn btn-danger btn-sm" (click)="removeProduct(i)">Eliminar</button>
-            </div>
-            <button type="button" class="btn btn-secondary btn-sm" (click)="addProduct()">Agregar Producto</button>
+            <table class="table table-bordered mb-2">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Cantidad</th>
+                  <th>Precio Unitario</th>
+                  <th>Total</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let product of newEntry.productos; let i = index">
+                  <td>
+                    <select [(ngModel)]="product.nombre" class="form-control" name="producto-{{i}}" required>
+                      <option *ngFor="let producto of productos" [value]="producto">{{ producto }}</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" [(ngModel)]="product.cantidad" class="form-control" placeholder="Cantidad" name="cantidad-{{i}}" required>
+                  </td>
+                  <td>
+                    <input type="text" [(ngModel)]="product.precioUnitario" class="form-control" placeholder="Precio Unitario" name="precioUnitario-{{i}}" required>
+                  </td>
+                  <td>
+                    <input type="text" [(ngModel)]="product.Total" class="form-control" placeholder="Total" name="Total-{{i}}" required>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-danger btn-sm" (click)="removeProduct(i)">Eliminar</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#addProductModal">Agregar Producto desde Modal</button>
           </div>
           <button type="submit" class="btn btn-success mb-2">Agregar</button>
         </form>

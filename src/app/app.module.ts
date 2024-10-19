@@ -10,6 +10,7 @@ import { GuiaEntradaComponent } from './guia-entrada/guia-entrada.component';
 import { GuiaSalidaComponent } from './guia-salida/guia-salida.component';
 import { HomeComponent } from './home/home.component';
 import { DocumentosDiferenciaComponent } from './documentos-diferencia/documentos-diferencia.component';
+import { SolicitudTraspasoComponent } from './solicitud-traspaso/solicitud-traspaso.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { DocumentosDiferenciaComponent } from './documentos-diferencia/documento
     GuiaEntradaComponent,
     GuiaSalidaComponent,
     HomeComponent,
-    DocumentosDiferenciaComponent
+    DocumentosDiferenciaComponent,
+    SolicitudTraspasoComponent
   ],
   imports: [
     BrowserModule,

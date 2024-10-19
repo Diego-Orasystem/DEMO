@@ -4,11 +4,13 @@ import { GuiaEntradaComponent } from './guia-entrada/guia-entrada.component';
 import { GuiaSalidaComponent } from './guia-salida/guia-salida.component';
 import { HomeComponent } from './home/home.component';
 import { DocumentosDiferenciaComponent } from './documentos-diferencia/documentos-diferencia.component';
+import { SolicitudTraspasoComponent } from './solicitud-traspaso/solicitud-traspaso.component';
 
 const routes: Routes = [
   { path: 'guia-entrada', component: GuiaEntradaComponent },
   { path: 'guia-salida', component: GuiaSalidaComponent },
   { path: 'documentos-diferencia', component: DocumentosDiferenciaComponent },
+  { path: 'solicitud-traspaso', component: SolicitudTraspasoComponent },
   { path: '', component: HomeComponent }
 ];
 

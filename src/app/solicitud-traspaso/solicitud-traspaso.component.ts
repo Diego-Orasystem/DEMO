@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ToastrService } from 'ngx-toastr'; // Import ToastrService
+import { Component } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-guia-salida',
-  templateUrl: './guia-salida.component.html',
-  styleUrls: ['./guia-salida.component.css']
+  selector: 'app-solicitud-traspaso',
+  templateUrl: './solicitud-traspaso.component.html',
+  styleUrl: './solicitud-traspaso.component.css'
 })
-export class GuiaSalidaComponent implements OnInit {
-  guiasSalidas: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] }[] = [];
+export class SolicitudTraspasoComponent {
+
+  solicitudTraspaso: { bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] }[] = [];
   newEntry = {
-    numeroTraspaso: '',
     bodega: '',
-    numeroGuia: '',
+    numeroGuia: 'Automatico',
     concepto: 'Traspasos entre bodegas',
     tipoTraslado: 'Traslados Internos',
     estado: 'Vigente',
@@ -22,16 +22,15 @@ export class GuiaSalidaComponent implements OnInit {
     centroCosto: '',
     productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
   };
-  newProduct = { 
+  newProduct = { // Added newProduct object
     nombre: '',
     cantidad: 0,
     precioUnitario: '',
     Total: ''
   };
   bodegas: string[] = [];
-  tiposTransaccion: { cod: string, des: string }[] = [];
+  tiposTransaccion: { cod: string, des: string }[] = []; // Added tiposTransaccion array
   selectedEntry: {
-    numeroTraspaso: string;
     bodega: string;
     numeroGuia: string;
     concepto: string;
@@ -44,24 +43,21 @@ export class GuiaSalidaComponent implements OnInit {
     centroCosto: string;
     productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[];
   } | null = null;
-  productos: string[] = ['Escalera', 'Cable', 'Foco'];  
+  productos: string[] = ['Escalera', 'Cable', 'Foco']; // Example product list
   centrosCosto: { cod: string, des: string }[] = [];
-  solicitudTraspasos: { bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] }[] = [];
-
-  constructor(private toastr: ToastrService) {}  
+  constructor(private toastr: ToastrService) {} // Inject ToastrService
 
   ngOnInit() {
     this.loadEntries();
     this.loadBodegas();
-    this.loadTiposTransaccion();  
+    this.loadTiposTransaccion(); // Load tiposTransaccion on initialization
     this.loadCentrosCosto();
-    this.loadSolicitudTraspasos(); // Carga las solicitudes de traspaso
   }
 
   addProduct() {
-    this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); 
-    this.newEntry.productos.push({ ...this.newProduct });  
-    this.newProduct = { nombre: '', cantidad: 0, precioUnitario: '', Total: '' };  
+    this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calculate Total
+    this.newEntry.productos.push({ ...this.newProduct }); // Use newProduct to add product
+    this.newProduct = { nombre: '', cantidad: 0, precioUnitario: '', Total: '' }; // Reset newProduct after adding
   }
 
   removeProduct(index: number) {
@@ -70,11 +66,10 @@ export class GuiaSalidaComponent implements OnInit {
 
   addEntry() {
     if (this.newEntry.bodega.trim() && this.newEntry.numeroGuia.trim() && this.newEntry.concepto.trim() && this.newEntry.fecha.trim() && this.newEntry.descripcion.trim() && this.newEntry.tipoTransaccion.trim() && this.newEntry.bodegaDestino.trim() && this.newEntry.centroCosto.trim() && this.newEntry.productos.length > 0) {
-      this.guiasSalidas.push({ ...this.newEntry });
+      this.solicitudTraspaso.push({ ...this.newEntry });
       this.newEntry = {
-        numeroTraspaso: '',
         bodega: '',
-        numeroGuia: '',
+        numeroGuia: '2',
         concepto: 'Traspasos entre bodegas',
         tipoTraslado: 'Traslados Internos',
         estado: 'Vigente',
@@ -93,16 +88,16 @@ export class GuiaSalidaComponent implements OnInit {
   }
 
   removeEntry(index: number) {
-    this.guiasSalidas.splice(index, 1);
+    this.solicitudTraspaso.splice(index, 1);
     this.saveEntries();
     this.toastr.success('Guía de salida eliminada exitosamente!');
   }
 
   loadEntries() {
-    const storedEntries = localStorage.getItem('guiasSalidas');
+    const storedEntries = localStorage.getItem('solicitudTraspaso');
     if (storedEntries) {
       console.log('guias salida', storedEntries);
-      this.guiasSalidas = JSON.parse(storedEntries);
+      this.solicitudTraspaso = JSON.parse(storedEntries);
     }
   }
 
@@ -122,20 +117,13 @@ export class GuiaSalidaComponent implements OnInit {
   }
 
   saveEntries() {
-    localStorage.setItem('guiasSalidas', JSON.stringify(this.guiasSalidas));
+    localStorage.setItem('solicitudTraspaso', JSON.stringify(this.solicitudTraspaso));
   }
 
   loadCentrosCosto() {
     const storedCentrosCosto = localStorage.getItem('centrosCosto');
     if (storedCentrosCosto) {
       this.centrosCosto = JSON.parse(storedCentrosCosto);
-    }
-  }
-
-  loadSolicitudTraspasos() {
-    const storedSolicitudTraspasos = localStorage.getItem('solicitudTraspaso');
-    if (storedSolicitudTraspasos) {
-      this.solicitudTraspasos = JSON.parse(storedSolicitudTraspasos);
     }
   }
 
@@ -147,20 +135,5 @@ export class GuiaSalidaComponent implements OnInit {
 
   calculateTotal() {
     this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calculate Total
-  }
-
-  selectTraspaso(numeroTraspaso: string) {
-    const traspaso = this.solicitudTraspasos.find(t => t.numeroGuia === numeroTraspaso);
-    if (traspaso) {
-      console.log('traspaso', traspaso);
-      this.newEntry.bodega = traspaso.bodega || '';
-      this.newEntry.bodegaDestino = traspaso.bodegaDestino || '';
-      this.newEntry.tipoTransaccion = traspaso.tipoTransaccion || '';
-      this.newEntry.descripcion = traspaso.descripcion || '';
-      this.newEntry.centroCosto = traspaso.centroCosto || '';
-      this.newEntry.productos = traspaso.productos || [];
-    } else {
-      console.log('Traspaso no encontrado.');
-    }
   }
 }

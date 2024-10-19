@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastrService } from 'ngx-toastr'; // Import ToastrService
 
 @Component({
   selector: 'app-guia-entrada',
@@ -7,9 +6,12 @@ import { ToastrService } from 'ngx-toastr'; // Import ToastrService
   styleUrls: ['./guia-entrada.component.css']
 })
 export class GuiaEntradaComponent implements OnInit {
-  guiasEntrada: { bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
-  guiasSalida: { bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
+  guiasEntrada: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
+  guiasSalida: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
+  filteredGuiasSalida: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
+  
   newEntry = {
+    numeroTraspaso: '',
     bodega: '',
     numeroGuia: '',
     concepto: 'Traspasos entre bodegas',
@@ -20,10 +22,11 @@ export class GuiaEntradaComponent implements OnInit {
     tipoTraslado: 'Traslados Internos',
     bodegaDestino: '',
     centroCosto: '',
-    productos: [] as { nombre: string; cantidad: number; descripcion: string; precioUnitario: string; Total: string; }[] // Explicitly define the type
+    productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
   };
   bodegas: string[] = [];
   selectedEntry: {
+    numeroTraspaso: string;
     bodega: string;
     numeroGuia: string;
     concepto: string;
@@ -34,11 +37,16 @@ export class GuiaEntradaComponent implements OnInit {
     tipoTraslado: string;
     bodegaDestino: string;
     centroCosto: string;
-    productos: any[];
+    productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[];
   } | null = null;
-  productos: string[] = ['Escalera', 'Cable', 'Foco']; // Example product list
   tiposTransaccion: string[] = [];
-  constructor(private toastr: ToastrService) {} // Inject ToastrService
+  newProduct = { // Added newProduct object
+    nombre: '',
+    cantidad: 0,
+    precioUnitario: '',
+    Total: ''
+  };
+  constructor() {} // Remove ToastrService injection
 
   ngOnInit() {
     this.loadEntries();
@@ -47,8 +55,14 @@ export class GuiaEntradaComponent implements OnInit {
     this.loadGuiasSalida();
   }
 
+  onBodegaChange() {
+    this.filteredGuiasSalida = this.guiasSalida.filter(guia => guia.bodega === this.newEntry.bodega);
+  }
+
   addProduct() {
-    this.newEntry.productos.push({ nombre: '', cantidad: 0, descripcion: '', precioUnitario: '', Total: '' });
+    this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calculate Total
+    this.newEntry.productos.push({ ...this.newProduct }); // Use newProduct to add product
+    this.newProduct = { nombre: '', cantidad: 0, precioUnitario: '', Total: '' }; // Reset newProduct after adding
   }
 
   removeProduct(index: number) {
@@ -56,37 +70,50 @@ export class GuiaEntradaComponent implements OnInit {
   }
 
   addEntry() {
-    if (this.newEntry.bodega.trim() && this.newEntry.numeroGuia.trim() && this.newEntry.concepto.trim() && this.newEntry.fecha.trim() && this.newEntry.descripcion.trim() && this.newEntry.tipoTransaccion.trim() && this.newEntry.bodegaDestino.trim() && this.newEntry.centroCosto.trim() && this.newEntry.productos.length > 0) {
+    if (!this.newEntry.bodega.trim()) {
+      console.log('El campo "Bodega" es obligatorio.');
+    } else if (!this.newEntry.numeroGuia.trim()) {
+      console.log('El campo "Número de Guía" es obligatorio.');
+    } else if (!this.newEntry.concepto.trim()) {
+      console.log('El campo "Concepto" es obligatorio.');
+    } else if (!this.newEntry.fecha.trim()) {
+      console.log('El campo "Fecha" es obligatorio.');
+    } else if (!this.newEntry.descripcion.trim()) {
+      console.log('El campo "Descripción" es obligatorio.');
+    } else if (!this.newEntry.bodegaDestino.trim()) {
+      console.log('El campo "Bodega Destino" es obligatorio.');
+    } else if (!this.newEntry.centroCosto.trim()) {
+      console.log('El campo "Centro de Costo" es obligatorio.');
+    } else if (this.newEntry.productos.length === 0) {
+      console.log('Debe agregar al menos un producto.');
+    } else {
       this.guiasEntrada.push({ ...this.newEntry });
       this.newEntry = {
+        numeroTraspaso: '',
         bodega: '',
         numeroGuia: '',
         concepto: 'Traspasos entre bodegas',
-        fecha: '',
+        tipoTraslado: 'Traslados Internos',
         estado: 'Vigente',
+        fecha: '',
         descripcion: '',
         tipoTransaccion: '',
-        tipoTraslado: 'Traslados Internos',
         bodegaDestino: '',
         centroCosto: '',
-        productos: [] as { nombre: string; cantidad: number; descripcion: string; precioUnitario: string; Total: string; }[] // Explicitly define the type
+        productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
       };
       this.saveEntries();
-      this.toastr.success('Guía de entrada agregada exitosamente!');
-    } else {
-      this.toastr.error('Por favor, complete todos los campos y agregue al menos un producto!');
     }
   }
-
   removeEntry(index: number) {
     this.guiasEntrada.splice(index, 1);
     this.saveEntries();
-    this.toastr.success('Guía de entrada eliminada exitosamente!');
   }
 
   loadEntries() {
     const storedEntries = localStorage.getItem('guiasEntrada');
     if (storedEntries) {
+      console.log('guias entrada', storedEntries);
       this.guiasEntrada = JSON.parse(storedEntries);
     }
   }
@@ -111,21 +138,27 @@ export class GuiaEntradaComponent implements OnInit {
   }
 
   loadGuiasSalida() {
-    const storedGuiasSalida = localStorage.getItem('guiasSalida');
+    const storedGuiasSalida = localStorage.getItem('guiasSalidas');
     if (storedGuiasSalida) {
       this.guiasSalida = JSON.parse(storedGuiasSalida);
+      this.filteredGuiasSalida = [...this.guiasSalida];
     }
-  }
-
-  showAlertToast() {
-    this.toastr.show('Este es un mensaje de alerta!', 'Alerta', {
-      toastClass: 'toast-alert ngx-toastr',
-      positionClass: 'toast-top-right',
-      closeButton: true
-    });
   }
 
   openDetailModal(entry: any): void {
     this.selectedEntry = entry;
+  }
+
+  onNumeroGuiaChange() {
+    const selectedGuia = this.filteredGuiasSalida.find(guia => guia.numeroGuia === this.newEntry.numeroGuia);
+    if (selectedGuia) {
+      this.newEntry.descripcion = selectedGuia.descripcion;
+      this.newEntry.centroCosto = selectedGuia.centroCosto;
+      this.newEntry.bodegaDestino = selectedGuia.bodegaDestino;
+      this.newEntry.productos = selectedGuia.productos;
+      this.newEntry.bodega = selectedGuia.bodega;
+      this.newEntry.numeroTraspaso = selectedGuia.numeroTraspaso;
+      console.log('new entry', this.newEntry);
+    }
   }
 }

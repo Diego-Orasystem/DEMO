@@ -12,6 +12,7 @@ export class AppComponent implements OnInit {
     this.storeBodegas();
     this.storeProductos();
     this.storeTipoTransaccion();
+    this.storeCentrosCosto();
   }
 
   storeBodegas() {
@@ -49,5 +50,21 @@ export class AppComponent implements OnInit {
       { cod: '03', des: 'Venta Bien Raiz' },
     ];
     localStorage.setItem('tiposTransaccion', JSON.stringify(tiposTransaccion));
+  }
+  storeCentrosCosto() {
+    const centrosCosto = [
+      { cod: '01-01', des: 'ADMINISTRACION GENERAL' },
+      { cod: '01-02', des: 'GERENCIA GENERAL - DIRECTORIO' },
+      { cod: '01-03', des: 'GERENCIA ADM Y FINANZAS' },
+      { cod: '01-04', des: 'INFORMATICA' },
+      { cod: '01-05', des: 'FINANZAS' },
+      { cod: '01-06', des: 'CREDITO Y COBRANZAS' },
+      { cod: '01-07', des: 'CONTABILIDAD-GESTION' },
+      { cod: '01-08', des: 'RRHH' },
+      { cod: '02-01', des: 'OPERACIONES - LOGISTICA' },
+      { cod: '02-02', des: 'NO USAR - INACTIVO' },
+      { cod: '02-03', des: 'ADQUISICIONES-ABASTECIMIENTOS' },
+    ];
+    localStorage.setItem('centrosCosto', JSON.stringify(centrosCosto));
   }
 }

@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr'; // Import ToastrService
   styleUrls: ['./guia-salida.component.css']
 })
 export class GuiaSalidaComponent implements OnInit {
+
   guiasSalidas: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] }[] = [];
   newEntry = {
     numeroTraspaso: '',

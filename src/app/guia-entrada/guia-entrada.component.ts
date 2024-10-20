@@ -158,6 +158,7 @@ export class GuiaEntradaComponent implements OnInit {
       this.newEntry.productos = selectedGuia.productos;
       this.newEntry.bodega = selectedGuia.bodega;
       this.newEntry.numeroTraspaso = selectedGuia.numeroTraspaso;
+      
       console.log('new entry', this.newEntry);
     }
   }

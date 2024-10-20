@@ -268,4 +268,10 @@ export class GuiaEntradaComponent implements OnInit {
     // Lógica para crear el documento de diferencia
     console.log('Documento de diferencia creado', this.newDocumentoDiferencia);
   }
+
+  calculateTotalProducto() {
+    this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calculate Total
+  }
+
+
 }

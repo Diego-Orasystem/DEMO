@@ -34,6 +34,7 @@
                 <td>{{ entry.centroCosto }}</td>
                 <td>
                   <button (click)="removeEntry(i)" class="btn btn-danger btn-sm">Eliminar</button>
+                <button data-toggle="modal" data-target="#trackingModal" (click)="openTrackingModal(entry.numeroGuia)" class="btn btn-info btn-sm">Ver</button>
                 </td>
               </tr>
             </tbody>
@@ -163,26 +164,66 @@
   
   <!-- Modal for Details -->
   <div class="modal fade" id="detailGuiaModal" tabindex="-1" role="dialog" aria-labelledby="detailGuiaModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content rounded">
-        <div class="modal-header">
-          <h5 class="modal-title" id="detailGuiaModalLabel">Detalles de la Solicitud de Traspaso</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #3F5267;">
+          <h5 class="modal-title" id="detailGuiaModalLabel" style="color: white;">Detalles de la Solicitud de Traspaso</h5>
+          <button type="button" class="close" style="color: white;" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <p><strong>Bodega:</strong> {{ selectedEntry?.bodega }}</p>
-          <p><strong>Número de Guía:</strong> {{ selectedEntry?.numeroGuia }}</p>
-          <p><strong>Concepto:</strong> {{ selectedEntry?.concepto }}</p>
-          <p><strong>Fecha:</strong> {{ selectedEntry?.fecha }}</p>
-          <p><strong>Descripción:</strong> {{ selectedEntry?.descripcion }}</p>
-          <p><strong>Tipo de Transacción:</strong> {{ selectedEntry?.tipoTransaccion }}</p>
-          <p><strong>Bodega Destino:</strong> {{ selectedEntry?.bodegaDestino }}</p>
-          <p><strong>Centro de Costo:</strong> {{ selectedEntry?.centroCosto }}</p>
-          <h5>Productos:</h5>
-          <table class="table table-bordered">
-            <thead>
+          <div class="container">
+            <div class="row">
+              <div class="col-md-4">
+                <div style="border: 1px solid; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Bodega:</strong> {{ selectedEntry?.bodega }}
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div style="border: 1px solid; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Número de Guía:</strong> {{ selectedEntry?.numeroGuia }}
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div style="border: 1px solid; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Concepto:</strong> {{ selectedEntry?.concepto }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div style="border: 1px solid; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Fecha:</strong> {{ selectedEntry?.fecha }}
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div style="border: 1px solid; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Descripción:</strong> {{ selectedEntry?.descripcion }}
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div style="border: 1px solid; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Tipo de Transacción:</strong> {{ selectedEntry?.tipoTransaccion }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div style="border: 1px solid; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Bodega Destino:</strong> {{ selectedEntry?.bodegaDestino }}
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div style="border: 1px solid; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Centro de Costo:</strong> {{ selectedEntry?.centroCosto }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <table class="table table-hover table-striped table-bordered">
+            <thead class="thead-" style="background-color: #343a40; color:white;">
               <tr>
                 <th>Producto</th>
                 <th>Cantidad</th>
@@ -203,6 +244,9 @@
       </div>
     </div>
   </div>
+
+
+  
   <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content rounded">
@@ -240,3 +284,124 @@
   </div>
   
   
+
+   <!-- Modal for Tracking -->
+   <div class="modal fade" id="trackingModal" tabindex="-1" role="dialog" aria-labelledby="trackingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content border-with-title rounded">
+        <div class="modal-header">
+          <h5 class="modal-title text-center" id="trackingModalLabel">Seguimiento de Solicitud de Traspaso</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="guias-salida-tab" data-toggle="tab" href="#guias-salida" role="tab" aria-controls="guias-salida" aria-selected="true">Guías de Salida</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="guias-entrada-tab" data-toggle="tab" href="#guias-entrada" role="tab" aria-controls="guias-entrada" aria-selected="false">Guías de Entrada</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="documentos-diferencia-tab" data-toggle="tab" href="#documentos-diferencia" role="tab" aria-controls="documentos-diferencia" aria-selected="false">Documentos de Diferencia</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="guias-salida" role="tabpanel" aria-labelledby="guias-salida-tab">
+              <div class="table-responsive mt-4">
+                <table class="table table-hover table-bordered mt-3" style="border-color: #343a40;">
+                  <thead class="thead-dark" style="border-color: #343a40;">
+                    <tr>
+                      <th style="border-color: #343a40;">Número de Traspaso</th>
+                      <th style="border-color: #343a40;">Bodega</th>
+                      <th style="border-color: #343a40;">Número de Guía</th>
+                      <th style="border-color: #343a40;">Concepto</th>
+                      <th style="border-color: #343a40;">Fecha</th>
+                      <th style="border-color: #343a40;">Descripción</th>
+                      <th style="border-color: #343a40;">Tipo de Transacción</th>
+                      <th style="border-color: #343a40;">Bodega Destino</th>
+                      <th style="border-color: #343a40;">Centro de Costo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let guia of relatedGuiasSalida; let i = index" [ngClass]="{'table-secondary': i % 2 === 0, 'table-light': i % 2 !== 0}" style="border-color: #343a40;">
+                      <td style="border-color: #343a40;">{{ guia.numeroTraspaso }}</td>
+                      <td style="border-color: #343a40;">{{ guia.bodega }}</td>
+                      <td style="border-color: #343a40;">{{ guia.numeroGuia }}</td>
+                      <td style="border-color: #343a40;">{{ guia.concepto }}</td>
+                      <td style="border-color: #343a40;">{{ guia.fecha }}</td>
+                      <td style="border-color: #343a40;">{{ guia.descripcion }}</td>
+                      <td style="border-color: #343a40;">{{ guia.tipoTransaccion }}</td>
+                      <td style="border-color: #343a40;">{{ guia.bodegaDestino }}</td>
+                      <td style="border-color: #343a40;">{{ guia.centroCosto }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="guias-entrada" role="tabpanel" aria-labelledby="guias-entrada-tab">
+              <div class="table-responsive mt-4">
+                <table class="table table-hover table-bordered mt-3" style="border-color: #343a40;">
+                  <thead class="thead-dark" style="border-color: #343a40;">
+                    <tr>
+                      <th style="border-color: #343a40;">Número de Traspaso</th>
+                      <th style="border-color: #343a40;">Bodega</th>
+                      <th style="border-color: #343a40;">Número de Guía</th>
+                      <th style="border-color: #343a40;">Concepto</th>
+                      <th style="border-color: #343a40;">Fecha</th>
+                      <th style="border-color: #343a40;">Descripción</th>
+                      <th style="border-color: #343a40;">Tipo de Transacción</th>
+                      <th style="border-color: #343a40;">Bodega Destino</th>
+                      <th style="border-color: #343a40;">Centro de Costo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let guia of relatedGuiasEntrada; let i = index" [ngClass]="{'table-secondary': i % 2 === 0, 'table-light': i % 2 !== 0}" style="border-color: #343a40;">
+                      <td style="border-color: #343a40;">{{ guia.numeroTraspaso }}</td>
+                      <td style="border-color: #343a40;">{{ guia.bodega }}</td>
+                      <td style="border-color: #343a40;">{{ guia.numeroGuia }}</td>
+                      <td style="border-color: #343a40;">{{ guia.concepto }}</td>
+                      <td style="border-color: #343a40;">{{ guia.fecha }}</td>
+                      <td style="border-color: #343a40;">{{ guia.descripcion }}</td>
+                      <td style="border-color: #343a40;">{{ guia.tipoTransaccion }}</td>
+                      <td style="border-color: #343a40;">{{ guia.bodegaDestino }}</td>
+                      <td style="border-color: #343a40;">{{ guia.centroCosto }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="documentos-diferencia" role="tabpanel" aria-labelledby="documentos-diferencia-tab">
+              <div class="table-responsive mt-4">
+                <table class="table table-hover table-bordered mt-3" style="border-color: #343a40;">
+                  <thead class="thead-dark" style="border-color: #343a40;">
+                    <tr>
+                      <th style="border-color: #343a40;">Número de Documento</th>
+                      <th style="border-color: #343a40;">Número de Traspaso</th>
+                      <th style="border-color: #343a40;">Número de Guía de Salida</th>
+                      <th style="border-color: #343a40;">Número de Guía de Entrada</th>
+                      <th style="border-color: #343a40;">Fecha</th>
+                      <th style="border-color: #343a40;">Motivo</th>
+                      <th style="border-color: #343a40;">Descripción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let doc of relatedDocumentosDiferencia; let i = index" [ngClass]="{'table-secondary': i % 2 === 0, 'table-light': i % 2 !== 0}" style="border-color: #343a40;">
+                      <td style="border-color: #343a40;">{{ doc.numeroDocumento }}</td>
+                      <td style="border-color: #343a40;">{{ doc.numeroTraspaso }}</td>
+                      <td style="border-color:   #343a40;">{{ doc.numeroGuiaSalida }}</td>
+                      <td style="border-color: #343a40;">{{ doc.numeroGuiaEntrada }}</td>
+                      <td style="border-color: #343a40;">{{ doc.fecha }}</td>
+                      <td style="border-color: #343a40;">{{ doc.motivo }}</td>
+                      <td style="border-color: #343a40;">{{ doc.descripcion }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

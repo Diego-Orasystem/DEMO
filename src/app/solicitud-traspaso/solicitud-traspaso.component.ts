@@ -7,14 +7,23 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './solicitud-traspaso.component.css'
 })
 export class SolicitudTraspasoComponent {
+  documentoDiferencia: { numeroDocumento: string; numeroTraspaso: string; numeroGuiaSalida: string; numeroGuiaEntrada: string; fecha: string; motivo: string; descripcion: string; productos: any }[] = [];
+  guiasEntrada: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
+  guiasSalida: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
+ 
+relatedGuiasEntrada: any[] = [];
+relatedGuiasSalida: any[] = [];
+relatedDocumentosDiferencia: any[] = [];
 
-  solicitudTraspaso: { bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] }[] = [];
+
+
+  solicitudTraspaso: { bodega: string, numeroGuia: string, estado: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] }[] = [];
   newEntry = {
     bodega: '',
     numeroGuia: 'Automatico',
     concepto: 'Traspasos entre bodegas',
     tipoTraslado: 'Traslados Internos',
-    estado: 'Vigente',
+    estado: 'Pendiente',
     fecha: new Date().toISOString().split('T')[0],
     descripcion: '',
     tipoTransaccion: '',
@@ -52,6 +61,7 @@ export class SolicitudTraspasoComponent {
     this.loadBodegas();
     this.loadTiposTransaccion(); // Load tiposTransaccion on initialization
     this.loadCentrosCosto();
+    this.loadModulos();
   }
 
   addProduct() {
@@ -72,7 +82,7 @@ export class SolicitudTraspasoComponent {
         numeroGuia: '2',
         concepto: 'Traspasos entre bodegas',
         tipoTraslado: 'Traslados Internos',
-        estado: 'Vigente',
+        estado: 'Pendiente',
         fecha: '',
         descripcion: '',
         tipoTransaccion: '',
@@ -136,4 +146,40 @@ export class SolicitudTraspasoComponent {
   calculateTotal() {
     this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calculate Total
   }
+  loadModulos() {
+    const storedGuiaSalida = localStorage.getItem('guiasSalidas');
+    const storedGuiaEntrada = localStorage.getItem('guiasEntrada');
+    const storedDocumentosDiferencia = localStorage.getItem('documentoDiferencia');
+    if (storedGuiaSalida) {
+      this.guiasSalida = JSON.parse(storedGuiaSalida);
+    }
+
+    if (storedGuiaEntrada) {
+      this.guiasEntrada = JSON.parse(storedGuiaEntrada);
+    }
+
+    if (storedDocumentosDiferencia) {
+      this.documentoDiferencia = JSON.parse(storedDocumentosDiferencia);
+    }
+  }
+
+
+
+  openTrackingModal(numeroTraspaso: string): void {
+
+    // Filter guiasSalida, guiasEntrada, and documentoDiferencia
+    this.relatedGuiasSalida = this.guiasSalida.filter(guia => guia.numeroTraspaso === numeroTraspaso);
+    this.relatedGuiasEntrada = this.guiasEntrada.filter(guia => guia.numeroTraspaso === numeroTraspaso);
+    this.relatedDocumentosDiferencia = this.documentoDiferencia.filter(doc => doc.numeroTraspaso === numeroTraspaso);
+
+    // Display these entries in a modal or another component
+    console.log('Related Guías de Salida:', this.relatedGuiasSalida);
+    console.log('Related Guías de Entrada:', this.relatedGuiasEntrada);
+    console.log('Related Documentos de Diferencia:', this.relatedDocumentosDiferencia);
+
+    // Additional logic to display these entries in a modal
+  }
+
+
+
 }

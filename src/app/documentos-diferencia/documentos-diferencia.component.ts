@@ -8,7 +8,9 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class DocumentosDiferenciaComponent implements OnInit {
     documentoDiferencia: { numeroDocumento: string; numeroTraspaso: string; numeroGuiaSalida: string; numeroGuiaEntrada: string; fecha: string; motivo: string; descripcion: string; productos: any }[] = [];
-    newEntry = {
+    guiasEntrada: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
+    guiasSalida: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
+     newEntry = {
       numeroDocumento: '',
       numeroTraspaso: '',
       numeroGuiaSalida: '',
@@ -39,6 +41,8 @@ export class DocumentosDiferenciaComponent implements OnInit {
     productos: string[] = ['Escalera', 'Cable', 'Foco'];  
     centrosCosto: { cod: string, des: string }[] = [];
     solicitudTraspasos: { bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] }[] = [];
+    filteredGuiasSalida: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
+    filteredGuiasEntrada: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
   
     constructor(private toastr: ToastrService) {}  
   
@@ -48,6 +52,8 @@ export class DocumentosDiferenciaComponent implements OnInit {
       this.loadTiposTransaccion();  
       this.loadCentrosCosto();
       this.loadSolicitudTraspasos(); // Carga las solicitudes de traspaso
+      this.loadGuiasEntrada();
+      this.loadGuiasSalida();
     }
   
     addProduct() {
@@ -89,7 +95,7 @@ export class DocumentosDiferenciaComponent implements OnInit {
     loadEntries() {
       const storedEntries = localStorage.getItem('documentoDiferencia');
       if (storedEntries) {
-        console.log('guias salida', storedEntries);
+        console.log('documentoDiferencia', storedEntries);
         this.documentoDiferencia = JSON.parse(storedEntries);
       }
     }
@@ -127,6 +133,22 @@ export class DocumentosDiferenciaComponent implements OnInit {
       }
     }
   
+    loadGuiasEntrada() {
+      const storedGuiasEntrada = localStorage.getItem('guiasEntrada');
+      if (storedGuiasEntrada) {
+        this.guiasEntrada = JSON.parse(storedGuiasEntrada);
+        console.log('guiasEntrada', this.guiasEntrada);
+      }
+    }
+  
+    loadGuiasSalida() {
+      const storedGuiasSalida = localStorage.getItem('guiasSalidas');
+      if (storedGuiasSalida) {
+        this.guiasSalida = JSON.parse(storedGuiasSalida);
+        console.log('guiasSalida', this.guiasSalida);
+      }
+    }
+  
     openDetailModal(gSalida: any): void {
       // Implement the logic to open the detail modal
       this.selectedEntry = gSalida;
@@ -137,19 +159,21 @@ export class DocumentosDiferenciaComponent implements OnInit {
       this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calculate Total
     }
   
-     selectTraspaso(numeroTraspaso: string) {
-     /*  const traspaso = this.solicitudTraspasos.find(t => t.numeroGuia === numeroTraspaso);
+    selectTraspaso(numeroTraspaso: string) {
+      const traspaso = this.solicitudTraspasos.find(t => t.numeroGuia === numeroTraspaso);
       if (traspaso) {
         console.log('traspaso', traspaso);
-        this.newEntry.bodega = traspaso.bodega || '';
-        this.newEntry.bodegaDestino = traspaso.bodegaDestino || '';
-        this.newEntry.tipoTransaccion = traspaso.tipoTransaccion || '';
+     
         this.newEntry.descripcion = traspaso.descripcion || '';
-        this.newEntry.centroCosto = traspaso.centroCosto || '';
         this.newEntry.productos = traspaso.productos || [];
+        
+        // Filter guiasSalida and guiasEntrada
+        this.filteredGuiasSalida = this.guiasSalida.filter(guia => guia.numeroTraspaso === numeroTraspaso);
+        this.filteredGuiasEntrada = this.guiasEntrada.filter(guia => guia.numeroTraspaso === numeroTraspaso);
+      console.log('filteredGuiasSalida', this.filteredGuiasSalida);
+      console.log('filteredGuiasEntrada', this.filteredGuiasEntrada);
       } else {
         console.log('Traspaso no encontrado.');
-      } */
-    } 
-  }
-  
+      }
+    }
+}

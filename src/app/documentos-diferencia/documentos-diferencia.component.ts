@@ -68,6 +68,12 @@ export class DocumentosDiferenciaComponent implements OnInit {
   
     addEntry() {
       if (this.newEntry.numeroTraspaso.trim() && this.newEntry.numeroGuiaSalida.trim() && this.newEntry.numeroGuiaEntrada.trim() && this.newEntry.motivo.trim() && this.newEntry.descripcion.trim() && this.newEntry.productos.length > 0) {
+        const lastEntry = this.documentoDiferencia[this.documentoDiferencia.length - 1];
+        let lastNumeroDocumento = lastEntry && lastEntry.numeroDocumento ? parseInt(lastEntry.numeroDocumento, 10) : 0;
+        if (isNaN(lastNumeroDocumento)) {
+          lastNumeroDocumento = 0;
+        }
+        this.newEntry.numeroDocumento = (lastNumeroDocumento + 1).toString();
         this.documentoDiferencia.push({ ...this.newEntry });
         this.newEntry = {
           numeroDocumento: '',

@@ -131,7 +131,7 @@
                     <input type="text" [(ngModel)]="product.precioUnitario" class="form-control" placeholder="Precio Unitario" name="precioUnitario-{{i}}" required>
                   </td>
                   <td style="border-color: #343a40;">
-                    <input type="text" [(ngModel)]="product.Total" class="form-control" placeholder="Total" name="Total-{{i}}" required>
+                    <input type="text" [value]="calculateTotal(+product.cantidad, +product.precioUnitario)" class="form-control" placeholder="Total" name="Total-{{i}}" disabled>
                   </td>
                   <td style="border-color: #343a40;">
                     <button type="button" class="btn btn-danger btn-sm" (click)="removeProduct(i)">Eliminar</button>
@@ -141,7 +141,12 @@
             </table>
             <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#addProductModal">Agregar Producto desde Modal</button>
           </div>
-          <button type="submit" class="btn btn-success mb-2">Agregar</button>
+          <div class="d-flex justify-content-start mb-2">
+            <button type="submit" class="btn btn-success mr-2">Agregar</button>
+            <button *ngIf="compareProducts()" type="button" class="btn btn-warning" data-toggle="modal" data-target="#createDocumentoDiferenciaModal" (click)="crearDocumentoDiferencia()">
+              Crear Documento Diferencia
+            </button>
+          </div>
         </form>
       </div>
     </div>
@@ -211,6 +216,109 @@
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  
+  <!-- Modal for Creating -->
+  <div class="modal fade" id="createDocumentoDiferenciaModal" tabindex="-1" role="dialog" aria-labelledby="createDocumentoDiferenciaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content border-with-title rounded">
+        <div class="modal-header">
+          <h5 class="modal-title text-center" id="createGuiaModalLabel">Crear Documento de Diferencia</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="addDocumentoDiferencia()" class="form">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group mb-2 border p-3 rounded">
+                  <label for="numeroTraspaso">Número de Solicitud de Traspasos</label>
+                  <input type="text" [(ngModel)]="newDocumentoDiferencia.numeroTraspaso" class="form-control" id="numeroTraspaso" name="numeroTraspaso" required readonly>
+                </div>
+                <div class="form-group mb-2 border p-3 rounded">
+                  
+                  <div class="form-group mb-2">
+                    <label for="numeroGuiaSalida">Número de Guía de Salida</label>
+                    <div class="d-flex">
+                      <input type="text" [(ngModel)]="newDocumentoDiferencia.numeroGuiaSalida" class="form-control form-control-sm w-50" id="numeroGuiaSalida" name="numeroGuiaSalida" required readonly>
+                    </div>
+                  </div>
+                  <div class="form-group mb-2">
+                    <label for="numeroGuiaEntrada">Número de Guía de Entrada</label>
+                    <div class="d-flex">
+                      <input type="text" [(ngModel)]="newDocumentoDiferencia.numeroGuiaEntrada" class="form-control form-control-sm w-50" id="numeroGuiaEntrada" name="numeroGuiaEntrada" required readonly>
+                    </div>
+                  </div>
+                  <div class="form-group mb-2">
+                    <label for="motivo">Motivo</label>
+                    <select [(ngModel)]="newDocumentoDiferencia.motivo" class="form-control" id="motivo" name="motivo" required>
+                      <option value="" disabled selected>Seleccione un motivo</option>
+                      <option value="Falta de inventario">Falta de inventario</option>
+                      <option value="Error en la documentación">Error en la documentación</option>
+                      <option value="Problemas de transporte">Problemas de transporte</option>
+                      <option value="Otros">Otros</option>
+                    </select>
+                  </div>
+                  <div class="form-group mb-2 d-flex">
+                    <div class="w-50 mr-2">
+                      <label for="fecha">Fecha</label>
+                      <input type="date" [(ngModel)]="newDocumentoDiferencia.fecha" class="form-control form-control-sm" id="fecha" name="fecha" required>
+                    </div>
+                  </div>
+                
+                  <div class="form-group mb-2">
+                    <label for="descripcion">Descripción</label>
+                    <textarea [(ngModel)]="newDocumentoDiferencia.descripcion" class="form-control" id="descripcion" name="descripcion"></textarea>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group mb-2">
+              <label for="productos">Productos</label>
+              <table class="table table-bordered mb-2">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let product of newDocumentoDiferencia.productos; let i = index">
+                    <td>
+                      <select [(ngModel)]="product.nombre" class="form-control" name="producto-{{i}}" required>
+                        <option *ngFor="let producto of productos" [value]="producto">{{ producto }}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <input type="number" [(ngModel)]="product.cantidad" class="form-control" placeholder="Cantidad" name="cantidad-{{i}}" required>
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="product.precioUnitario" class="form-control" placeholder="Precio Unitario" name="precioUnitario-{{i}}" required>
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="product.Total" class="form-control" placeholder="Total" name="Total-{{i}}" required>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-danger btn-sm" (click)="removeProduct(i)">Eliminar</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <button type="submit" class="btn btn-success mb-2">Agregar</button>
+          </form>
         </div>
       </div>
     </div>

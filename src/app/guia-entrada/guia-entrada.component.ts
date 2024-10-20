@@ -9,7 +9,19 @@ export class GuiaEntradaComponent implements OnInit {
   guiasEntrada: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
   guiasSalida: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
   filteredGuiasSalida: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
-  
+  guiaSalidaSeleccionada: any = null;
+  documentoDiferencia: { numeroDocumento: string; numeroTraspaso: string; numeroGuiaSalida: string; numeroGuiaEntrada: string; fecha: string; motivo: string; descripcion: string; productos: any }[] = [];
+
+  newDocumentoDiferencia = {
+    numeroDocumento: '',
+    numeroTraspaso: '',
+    numeroGuiaSalida: '',
+    numeroGuiaEntrada: '',
+    fecha: new Date().toISOString().split('T')[0],
+    motivo: '',
+    descripcion: '',
+    productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
+  };
   newEntry = {
     numeroTraspaso: '',
     bodega: '',
@@ -46,6 +58,8 @@ export class GuiaEntradaComponent implements OnInit {
     precioUnitario: '',
     Total: ''
   };
+  productos: string[] = ['Escalera', 'Cable', 'Foco'];  
+
   constructor() {} // Remove ToastrService injection
 
   ngOnInit() {
@@ -53,6 +67,7 @@ export class GuiaEntradaComponent implements OnInit {
     this.loadBodegas();
     this.loadTiposTransaccion();
     this.loadGuiasSalida();
+    this.loadDocumentoDiferencia();
   }
 
   onBodegaChange() {
@@ -105,6 +120,20 @@ export class GuiaEntradaComponent implements OnInit {
       this.saveEntries();
     }
   }
+  addDocumentoDiferencia() {
+    this.documentoDiferencia.push({ ...this.newDocumentoDiferencia });
+    this.newDocumentoDiferencia = {
+      numeroDocumento: '',
+      numeroTraspaso: '',
+      numeroGuiaSalida: '',
+      numeroGuiaEntrada: '',
+      fecha: '',
+      motivo: '',
+      descripcion: '',
+      productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
+    };
+    this.saveDocumentoDiferencia();
+  }
   removeEntry(index: number) {
     this.guiasEntrada.splice(index, 1);
     this.saveEntries();
@@ -136,12 +165,21 @@ export class GuiaEntradaComponent implements OnInit {
   saveEntries() {
     localStorage.setItem('guiasEntrada', JSON.stringify(this.guiasEntrada));
   }
+  saveDocumentoDiferencia() {
+    localStorage.setItem('documentoDiferencia', JSON.stringify(this.documentoDiferencia));
+  }
 
   loadGuiasSalida() {
     const storedGuiasSalida = localStorage.getItem('guiasSalidas');
     if (storedGuiasSalida) {
       this.guiasSalida = JSON.parse(storedGuiasSalida);
       this.filteredGuiasSalida = [...this.guiasSalida];
+    }
+  }
+  loadDocumentoDiferencia() {
+    const storedDocumentoDiferencia = localStorage.getItem('documentoDiferencia');
+    if (storedDocumentoDiferencia) {
+      this.documentoDiferencia = JSON.parse(storedDocumentoDiferencia);
     }
   }
 
@@ -155,11 +193,79 @@ export class GuiaEntradaComponent implements OnInit {
       this.newEntry.descripcion = selectedGuia.descripcion;
       this.newEntry.centroCosto = selectedGuia.centroCosto;
       this.newEntry.bodegaDestino = selectedGuia.bodegaDestino;
-      this.newEntry.productos = selectedGuia.productos;
+      this.newEntry.productos = JSON.parse(JSON.stringify(selectedGuia.productos)); // Deep copy
       this.newEntry.bodega = selectedGuia.bodega;
       this.newEntry.numeroTraspaso = selectedGuia.numeroTraspaso;
-      
+      this.guiaSalidaSeleccionada = selectedGuia;
       console.log('new entry', this.newEntry);
     }
+  }
+
+  calculateTotal(cantidad: number, precioUnitario: number): number {
+    return cantidad * precioUnitario;
+  }
+
+  compareProducts(): boolean {
+    const salidaProductos = this.guiaSalidaSeleccionada?.productos || [];
+    const entradaProductos = this.newEntry.productos || [];
+
+    for (let i = 0; i < entradaProductos.length; i++) {
+      const entradaProducto = entradaProductos[i];
+      const salidaProducto = salidaProductos.find((p: any) => p.nombre === entradaProducto.nombre);
+
+      if (salidaProducto) {
+        if (entradaProducto.cantidad !== salidaProducto.cantidad || 
+            parseFloat(entradaProducto.precioUnitario) !== parseFloat(salidaProducto.precioUnitario)) {
+          return true; // Hay una diferencia
+        }
+      } else {
+        return true; // Producto no encontrado en la guía de salida
+      }
+    }
+    return false; // No hay diferencias
+  }
+
+  crearDocumentoDiferencia() {
+    const lastEntry = this.documentoDiferencia[this.documentoDiferencia.length - 1];
+    let lastNumeroDocumento = lastEntry && lastEntry.numeroDocumento ? parseInt(lastEntry.numeroDocumento, 10) : 0;
+    if (isNaN(lastNumeroDocumento)) {
+      lastNumeroDocumento = 0;
+    }
+
+    const diferenciaProductos = this.newEntry.productos.map(entradaProducto => {
+      const salidaProducto = this.guiaSalidaSeleccionada?.productos.find((p: any) => p.nombre === entradaProducto.nombre);
+      if (salidaProducto) {
+        return {
+          nombre: entradaProducto.nombre,
+          cantidad: entradaProducto.cantidad - salidaProducto.cantidad,
+          precioUnitario: entradaProducto.precioUnitario,
+          Total: (entradaProducto.cantidad - salidaProducto.cantidad) * parseFloat(entradaProducto.precioUnitario)
+        };
+      } else {
+        return {
+          nombre: entradaProducto.nombre,
+          cantidad: entradaProducto.cantidad,
+          precioUnitario: entradaProducto.precioUnitario,
+          Total: entradaProducto.cantidad * parseFloat(entradaProducto.precioUnitario)
+        };
+      }
+    });
+
+    this.newDocumentoDiferencia = {
+      numeroDocumento: (lastNumeroDocumento + 1).toString(),
+      numeroTraspaso: this.newEntry.numeroTraspaso,
+      numeroGuiaSalida: this.newEntry.numeroGuia,
+      numeroGuiaEntrada: this.newEntry.numeroGuia,
+      fecha: new Date().toISOString().split('T')[0],
+      motivo: '',
+      descripcion: '',
+      productos: diferenciaProductos.map(producto => ({
+        ...producto,
+        Total: producto.Total.toFixed(0) // Convert Total to string
+      }))
+    };
+    
+    // Lógica para crear el documento de diferencia
+    console.log('Documento de diferencia creado', this.newDocumentoDiferencia);
   }
 }

@@ -200,6 +200,8 @@ export class SolicitudTraspasoComponent {
     if (entry) {
       entry.estado = 'Aprobada';
       this.saveEntries();
+      this.showRadioButtons = false; // Dejar de mostrar los botones
+      this.showToast('Solicitud aprobada exitosamente', 'green'); // Mostrar toast de confirmación
     }
     console.log('Aprobar solicitud', numeroGuia);
   }
@@ -209,6 +211,26 @@ export class SolicitudTraspasoComponent {
     if (entry) {
       entry.estado = 'Rechazada';
       this.saveEntries();
+      this.showRadioButtons = false; // Dejar de mostrar los botones
+      this.showToast('Solicitud rechazada exitosamente', 'red'); // Mostrar toast de confirmación
     }
   }
+
+  showToast(message: string, color: string) {
+    // Lógica para mostrar un toast de confirmación
+    const toast = document.createElement('div');
+    toast.className = 'toast show'; // Asegurarse de que la clase 'show' esté presente
+    toast.innerText = message;
+    toast.style.position = 'fixed';
+    toast.style.top = '20px';
+    toast.style.right = '20px';
+    toast.style.backgroundColor = color; // Usar el color pasado como parámetro
+    toast.style.color = '#fff';
+    toast.style.padding = '10px';
+    toast.style.borderRadius = '5px';
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      toast.remove();
+    }, 3000);
+  } 
 }

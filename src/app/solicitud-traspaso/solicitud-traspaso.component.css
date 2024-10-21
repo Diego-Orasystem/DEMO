@@ -15,3 +15,15 @@
   color: red;
 }
 
+@keyframes moveTruck {
+  from {
+    left: 0%;
+  }
+  to {
+    left: var(--truck-final-position);
+  }
+}
+
+.truck-animation {
+  animation: moveTruck 2s forwards;
+}

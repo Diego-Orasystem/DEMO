@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './solicitud-traspaso.component.html',
   styleUrl: './solicitud-traspaso.component.css'
 })
-export class SolicitudTraspasoComponent {
+export class SolicitudTraspasoComponent implements AfterViewInit {
   documentoDiferencia: { numeroDocumento: string; numeroTraspaso: string; numeroGuiaSalida: string; numeroGuiaEntrada: string; fecha: string; motivo: string; descripcion: string; productos: any }[] = [];
   guiasEntrada: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
   guiasSalida: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
@@ -258,21 +258,33 @@ export class SolicitudTraspasoComponent {
     console.log('estado', estado);
     switch (estado) {
       case 'Pendiente':
-        return 'yellow';
+        return '#FFD700'; // Darker yellow
       case 'Aprobada':
         return 'green';
       case 'En Tránsito':
-        return 'yellow';
+        return '#FFD700'; // Darker yellow
       case 'Entrega Total':
         return 'green';
       case 'Rechazada':
         return 'red';
       case 'Entrega con Diferencia':
-        return 'yellow';
+        return 'green';
       case 'Entrega Parcial':
-        return 'yellow';
+        return '#FFD700'; // Darker yellow
       default:
         return '';
     }
+  }
+
+  ngAfterViewInit() {
+    this.openTrackingModal = (numeroTraspaso: string) => {
+      // Your existing logic...
+      
+      // Add the animation class
+      const truckElement = document.querySelector('.fas.fa-truck');
+      if (truckElement) {
+        truckElement.classList.add('truck-animation');
+      }
+    };
   }
 }

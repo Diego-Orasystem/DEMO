@@ -232,4 +232,47 @@ export class SolicitudTraspasoComponent {
       toast.remove();
     }, 3000);
   } 
+  getTruckPosition(): string {
+    switch (this.selectedEntry?.estado) {
+      case 'Pendiente':
+        return '0%';
+      case 'Aprobada':
+        return '0%';
+      case 'Rechazada':
+        return '0%';
+      case 'En Tránsito':
+        return '32%';
+      case 'Entrega Parcial':
+        return '57%';
+      case 'Entrega con Diferencia':
+        return '83%';
+      case 'Entrega Total':
+        return '83%';
+      default:
+        return '0%';
+    }
+  }
+
+
+  getLastPointColor(estado: string): string {
+    console.log('estado', estado);
+    switch (estado) {
+      case 'Pendiente':
+        return 'yellow';
+      case 'Aprobada':
+        return 'green';
+      case 'En Tránsito':
+        return 'yellow';
+      case 'Entrega Total':
+        return 'green';
+      case 'Rechazada':
+        return 'red';
+      case 'Entrega con Diferencia':
+        return 'yellow';
+      case 'Entrega Parcial':
+        return 'yellow';
+      default:
+        return '';
+    }
+  }
 }

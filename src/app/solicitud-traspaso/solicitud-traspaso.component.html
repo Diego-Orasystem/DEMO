@@ -310,12 +310,12 @@
 
 
           
-          <div class="d-flex align-items-center my-3" style="font-size: 2rem; width: 100%;">
+          <div class="d-flex align-items-center my-3" style="font-size: 2rem; width: 100%; position: relative;">
             <i class="fas fa-truck mx-2" 
-               [ngClass]="{
-                 'active-truck': selectedEntry?.estado === 'Pendiente' || selectedEntry?.estado === 'Aprobada' || selectedEntry?.estado === 'Rechazada' || selectedEntry?.estado === 'En Tránsito' || selectedEntry?.estado === 'Entrega Parcial' || selectedEntry?.estado === 'Entrega con Diferencia'
-               }"
-               [style.color]="selectedEntry?.estado === 'Aprobada' || selectedEntry?.estado === 'Entrega Parcial' || selectedEntry?.estado === 'Entrega con Diferencia' ? 'green' : (selectedEntry?.estado === 'Rechazada' ? 'red' : 'inherit')"></i>
+               [ngClass]="getLastPointColor(selectedEntry?.estado || '')"
+               [style.color]="getLastPointColor(selectedEntry?.estado || '')"
+               [style.left]="getTruckPosition()"
+               style="position: absolute;"></i>
             <div class="d-flex flex-grow-1 justify-content-between mx-2" style="border-bottom: 2px dotted; height: 0;">
               <div class="text-center">
                 <i class="fas fa-circle" 
@@ -464,6 +464,8 @@
       </div>
     </div>
   </div>
+
+
 
 
 

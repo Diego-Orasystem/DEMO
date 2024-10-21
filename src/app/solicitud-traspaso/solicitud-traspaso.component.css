@@ -1,0 +1,17 @@
+.active-truck {
+  position: relative;
+  left: 0; /* Adjust as needed to align with the first point */
+}
+
+.active-point-yellow {
+  color: yellow;
+}
+
+.active-point-green {
+  color: green;
+}
+
+.active-point-red {
+  color: red;
+}
+

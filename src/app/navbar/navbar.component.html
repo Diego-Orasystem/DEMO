@@ -1,12 +1,18 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<nav class="navbar navbar-expand-lg" style="background-color: #3F5267; padding: 20px;">
-  <a class="navbar-brand" href="#" style="color: white; font-size: 1.5rem;">VITEL - TRASPASOS</a>
+<nav class="navbar navbar-expand-md" style="background-color: #3F5267; padding: 10px;">
+  <a class="navbar-brand" href="#">
+    <img src="assets/images/logo-blanco.png" width="30" height="30" alt="Logo">
+  </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="ml-auto">
-    <a class="nav-link d-inline" href="#"><i class="fas fa-cog" style="font-size: 1.5rem;"></i></a>
-    <a class="nav-link d-inline" href="#"><i class="far fa-user" style="font-size: 1.5rem;"></i></a>
+    <a class="nav-link d-inline" href="#">
+      <i class="fas fa-cog" style="font-size: 1.5rem; color: #A2B7D3;"></i>
+    </a>
+    <a class="nav-link d-inline" href="#">
+      <i class="fas fa-user" style="font-size: 1.5rem; color:#A2B7D3;"></i>
+    </a>
   </div>
 </nav>
 <style>
@@ -16,7 +22,7 @@
   }
 </style>
 
-<nav class="navbar navbar-expand-md" style="background-color: #edf1f7;">
+<nav class="navbar navbar-expand-md" style="background-color: #fcfcfc;">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav2" aria-controls="navbarNav2" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon">
       <i class="fas fa-bars" style="color: #535c66;"></i> <!-- Usar un ícono de Font Awesome -->
@@ -24,21 +30,28 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav2">
     <ul class="navbar-nav">
+      <button id="js-nav-menu-wrapper-left-btn" class="btn btn-link" style="color: grey;">
+        <i class="fa-solid fa-angle-left"></i> 
+      </button>
       <li class="nav-item active">
-        <a class="nav-link" href="#" style="color: #535c66;"><i class="fas fa-home"></i> Home</a>
+        <a class="nav-link" href="#" style="color: grey;"><i class="fa-solid fa-list"></i> Inicio</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/solicitud-traspaso" style="color: #535c66;"><i class="fas fa-truck-loading"></i> Solicitud de Traspaso</a>
+       
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/guia-salida" style="color: #535c66;"><i class="fas fa-truck-loading"></i> Guia de Salida</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/guia-entrada" style="color: #535c66;"><i class="fas fa-truck"></i> Guia de Entrada</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/documentos-diferencia" style="color: #535c66;"><i class="fas fa-file-alt"></i> Documentos de Diferencia</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="traspasoDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: grey;">
+          <i class="fas fa-exchange-alt"></i> Traspaso
+        </a>
+        <div class="dropdown-menu" aria-labelledby="traspasoDropdown">
+          <a class="dropdown-item" href="/guia-salida"><i class="fas fa-truck-loading"></i> Guia de Salida</a>
+          <a class="dropdown-item" href="/guia-entrada"><i class="fas fa-truck"></i> Guia de Entrada</a>
+          <a class="dropdown-item" href="/documentos-diferencia"><i class="fas fa-file-alt"></i> Documentos de Diferencia</a>
+        </div>
       </li>
     </ul>
+    <button id="js-nav-menu-wrapper-right-btn" class="btn btn-link ml-auto" style="color: grey;">
+      <i class="fa-solid fa-angle-right"></i>
+    </button>
   </div>
 </nav>

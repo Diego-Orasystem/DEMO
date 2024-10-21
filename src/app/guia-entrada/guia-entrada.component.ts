@@ -314,7 +314,7 @@ export class GuiaEntradaComponent implements OnInit {
 
 
     if (TotalProductos === 0) {
-        if (totalProductosGuiasEntrada > 0 && totalProductosDocumentosDiferencia > 0) {
+        if (totalProductosGuiasEntrada > 0 && totalProductosDocumentosDiferencia != 0) {
             guia.estado = 'Entrega con Diferencia';
             console.log('Entrega con Diferencia: Cuadrada con Documentos de Diferencia.');
         } else {

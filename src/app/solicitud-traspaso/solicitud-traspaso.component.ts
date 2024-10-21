@@ -52,6 +52,10 @@ export class SolicitudTraspasoComponent {
   } | null = null;
   productos: string[] = ['Escalera', 'Cable', 'Foco']; // Example product list
   centrosCosto: { cod: string, des: string }[] = [];
+
+  showRadioButtons: boolean = false;
+
+
   constructor(private toastr: ToastrService) {} // Inject ToastrService
 
   ngOnInit() {
@@ -188,5 +192,23 @@ export class SolicitudTraspasoComponent {
 
     // Additional logic to display these entries in a modal
   }
+  toggleRadioButtons() {
+    this.showRadioButtons = !this.showRadioButtons;
+  }
+  aprobarSolicitud(numeroGuia: string) {
+    const entry = this.solicitudTraspaso.find(entry => entry.numeroGuia === numeroGuia);
+    if (entry) {
+      entry.estado = 'Aprobada';
+      this.saveEntries();
+    }
+    console.log('Aprobar solicitud', numeroGuia);
+  }
 
+  rechazarSolicitud(numeroGuia: string) {
+    const entry = this.solicitudTraspaso.find(entry => entry.numeroGuia === numeroGuia);
+    if (entry) {
+      entry.estado = 'Rechazada';
+      this.saveEntries();
+    }
+  }
 }

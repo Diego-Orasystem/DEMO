@@ -42,13 +42,13 @@
   <div class="modal fade" id="createGuiaModal" tabindex="-1" role="dialog" aria-labelledby="createGuiaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content border-with-title rounded">
-        <div class="modal-header">
+        <div class="modal-header" style="background-color: #3F5267; color: white;">
           <h5 class="modal-title text-center" id="createGuiaModalLabel">Crear Documento de Diferencia</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
           <form (ngSubmit)="addEntry()" class="form">
             <div class="row">
               <div class="col-md-6">
@@ -101,36 +101,35 @@
                 </div>
               </div>
             </div>
-            
             <div class="form-group mb-2">
               <label for="productos">Productos</label>
-              <table class="table table-bordered mb-2">
-                <thead>
+              <table class="table table-hover table-striped table-bordered mb-2" style="border-color: #343a40;">
+                <thead class="thead-dark" style="border-color: #343a40;">
                   <tr>
-                    <th>Producto</th>
-                    <th>Cantidad</th>
-                    <th>Precio Unitario</th>
-                    <th>Total</th>
-                    <th>Acciones</th>
+                    <th style="border-color: #343a40;">Producto</th>
+                    <th style="border-color: #343a40;">Cantidad</th>
+                    <th style="border-color: #343a40;">Precio Unitario</th>
+                    <th style="border-color: #343a40;">Total</th>
+                    <th style="border-color: #343a40;">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let product of newEntry.productos; let i = index">
-                    <td>
+                  <tr *ngFor="let product of newEntry.productos; let i = index" [ngClass]="{'table-secondary': i % 2 === 0, 'table-light': i % 2 !== 0}" style="border-color: #343a40;">
+                    <td style="border-color: #343a40;">
                       <select [(ngModel)]="product.nombre" class="form-control" name="producto-{{i}}" required>
                         <option *ngFor="let producto of productos" [value]="producto">{{ producto }}</option>
                       </select>
                     </td>
-                    <td>
+                    <td style="border-color: #343a40;">
                       <input type="number" [(ngModel)]="product.cantidad" class="form-control" placeholder="Cantidad" name="cantidad-{{i}}" required>
                     </td>
-                    <td>
+                    <td style="border-color: #343a40;">
                       <input type="text" [(ngModel)]="product.precioUnitario" class="form-control" placeholder="Precio Unitario" name="precioUnitario-{{i}}" required>
                     </td>
-                    <td>
+                    <td style="border-color: #343a40;">
                       <input type="text" [(ngModel)]="product.Total" class="form-control" placeholder="Total" name="Total-{{i}}" required>
                     </td>
-                    <td>
+                    <td style="border-color: #343a40;">
                       <button type="button" class="btn btn-danger btn-sm" (click)="removeProduct(i)">Eliminar</button>
                     </td>
                   </tr>
@@ -186,12 +185,12 @@
       </div>
     </div>
   </div>
-  <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+  <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
-      <div class="modal-content rounded">
-        <div class="modal-header">
+      <div class="modal-content rounded shadow-lg">
+        <div class="modal-header bg-primary text-white" style="background-color: #3F5267!important;">
           <h5 class="modal-title" id="addProductModalLabel">Agregar Producto</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -215,7 +214,7 @@
               <label for="productoTotal">Total</label>
               <input type="text" [value]="newProduct.Total | number:'1.0-0'" class="form-control" id="productoTotal" name="productoTotal" readonly>
             </div>
-            <button type="submit" class="btn btn-success mb-2">Agregar Producto</button>
+            <button type="submit" class="btn btn-success w-100">Agregar Producto</button>
           </form>
         </div>
       </div>

@@ -1,5 +1,4 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-solicitud-traspaso',
@@ -27,16 +26,16 @@ export class SolicitudTraspasoComponent implements AfterViewInit {
     tipoTransaccion: '',
     bodegaDestino: '',
     centroCosto: '',
-    productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
+    productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitamente definir el tipo
   };
-  newProduct = { // Added newProduct object
+  newProduct = { // Añadido objeto newProduct
     nombre: '',
     cantidad: 0,
     precioUnitario: '',
     Total: ''
   };
   bodegas: string[] = [];
-  tiposTransaccion: { cod: string, des: string }[] = []; // Added tiposTransaccion array
+  tiposTransaccion: { cod: string, des: string }[] = []; // Añadido array tiposTransaccion
   selectedEntry: {
     bodega: string;
     numeroGuia: string;
@@ -50,21 +49,21 @@ export class SolicitudTraspasoComponent implements AfterViewInit {
     centroCosto: string;
     productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[];
   } | null = null;
-  productos: string[] = ['Escalera', 'Cable', 'Foco']; // Example product list
+  productos: string[] = ['Escalera', 'Cable', 'Foco']; // Lista de productos de ejemplo
   centrosCosto: { cod: string, des: string }[] = [];
 
   showRadioButtons: boolean = false;
 
 
-  constructor(private toastr: ToastrService) {} // Inject ToastrService
+  constructor() {} // Constructor sin ToastrService
 
   ngOnInit() {
     this.loadEntries();
     this.loadBodegas();
-    this.loadTiposTransaccion(); // Load tiposTransaccion on initialization
+    this.loadTiposTransaccion(); // Cargar tiposTransaccion en la inicialización
     this.loadCentrosCosto();
     this.loadModulos();
-    this.setNumeroGuia(); // Set numeroGuia on initialization
+    this.setNumeroGuia(); // Establecer numeroGuia en la inicialización
   }
 
   setNumeroGuia() {
@@ -79,9 +78,14 @@ export class SolicitudTraspasoComponent implements AfterViewInit {
   }
 
   addProduct() {
-    this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calculate Total
-    this.newEntry.productos.push({ ...this.newProduct }); // Use newProduct to add product
-    this.newProduct = { nombre: '', cantidad: 0, precioUnitario: '', Total: '' }; // Reset newProduct after adding
+    if (this.newProduct.nombre.trim() && this.newProduct.cantidad > 0 && this.newProduct.precioUnitario.trim()) {
+      this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calcular Total
+      this.newEntry.productos.push({ ...this.newProduct }); // Usar newProduct para añadir producto
+      this.newProduct = { nombre: '', cantidad: 0, precioUnitario: '', Total: '' }; // Reiniciar newProduct después de añadir
+      this.showToast('Producto agregado exitosamente!', 'green'); // Mostrar toast de confirmación
+    } else {
+      this.showToast('Por favor, complete todos los campos del producto!', 'red'); // Mostrar toast de error
+    }
   }
 
   removeProduct(index: number) {
@@ -102,20 +106,20 @@ export class SolicitudTraspasoComponent implements AfterViewInit {
         tipoTransaccion: '',
         bodegaDestino: '',
         centroCosto: '',
-        productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
+        productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitamente definir el tipo
       };
-      this.setNumeroGuia(); // Set numeroGuia after adding entry
+      this.setNumeroGuia(); // Establecer numeroGuia después de añadir entrada
       this.saveEntries();
-      this.toastr.success('Guía de salida agregada exitosamente!');
+      this.showToast('Guía de salida agregada exitosamente!', 'green'); // Mostrar toast de confirmación
     } else {
-      this.toastr.error('Por favor, complete todos los campos y agregue al menos un producto!');
+      this.showToast('Por favor, complete todos los campos y agregue al menos un producto!', 'red'); // Mostrar toast de error
     }
   }
 
   removeEntry(index: number) {
     this.solicitudTraspaso.splice(index, 1);
     this.saveEntries();
-    this.toastr.success('Guía de salida eliminada exitosamente!');
+    this.showToast('Guía de salida eliminada exitosamente!', 'green'); // Mostrar toast de confirmación
   }
 
   loadEntries() {
@@ -133,7 +137,7 @@ export class SolicitudTraspasoComponent implements AfterViewInit {
     }
   }
 
-  loadTiposTransaccion() { // New method to load tiposTransaccion
+  loadTiposTransaccion() { // Nuevo método para cargar tiposTransaccion
     const storedTiposTransaccion = localStorage.getItem('tiposTransaccion');
     console.log(storedTiposTransaccion);
     if (storedTiposTransaccion) {
@@ -153,13 +157,13 @@ export class SolicitudTraspasoComponent implements AfterViewInit {
   }
 
   openDetailModal(gSalida: any): void {
-    // Implement the logic to open the detail modal
+    // Implementar la lógica para abrir el modal de detalles
     this.selectedEntry = gSalida;
-    // Additional logic to handle modal opening
+    // Lógica adicional para manejar la apertura del modal
   }
 
   calculateTotal() {
-    this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calculate Total
+    this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calcular Total
   }
   loadModulos() {
     const storedGuiaSalida = localStorage.getItem('guiasSalidas');
@@ -180,17 +184,17 @@ export class SolicitudTraspasoComponent implements AfterViewInit {
 
   openTrackingModal(numeroTraspaso: string): void {
 
-    // Filter guiasSalida, guiasEntrada, and documentoDiferencia
+    // Filtrar guiasSalida, guiasEntrada y documentoDiferencia
     this.relatedGuiasSalida = this.guiasSalida.filter(guia => guia.numeroTraspaso === numeroTraspaso);
     this.relatedGuiasEntrada = this.guiasEntrada.filter(guia => guia.numeroTraspaso === numeroTraspaso);
     this.relatedDocumentosDiferencia = this.documentoDiferencia.filter(doc => doc.numeroTraspaso === numeroTraspaso);
 
-    // Display these entries in a modal or another component
+    // Mostrar estas entradas en un modal u otro componente
     console.log('Related Guías de Salida:', this.relatedGuiasSalida);
     console.log('Related Guías de Entrada:', this.relatedGuiasEntrada);
     console.log('Related Documentos de Diferencia:', this.relatedDocumentosDiferencia);
 
-    // Additional logic to display these entries in a modal
+    // Lógica adicional para mostrar estas entradas en un modal
   }
   toggleRadioButtons() {
     this.showRadioButtons = !this.showRadioButtons;
@@ -222,10 +226,13 @@ export class SolicitudTraspasoComponent implements AfterViewInit {
     toast.innerText = message;
     toast.style.position = 'fixed';
     toast.style.top = '20px';
-    toast.style.right = '20px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.zIndex = '9999'; // Asegurarse de que el toast esté encima de todo
     toast.style.backgroundColor = color; // Usar el color pasado como parámetro
     toast.style.color = '#fff';
-    toast.style.padding = '10px';
+    toast.style.padding = '20px'; // Hacer el toast más grande
+    toast.style.fontSize = '1.2em'; // Aumentar el tamaño de la fuente
     toast.style.borderRadius = '5px';
     document.body.appendChild(toast);
     setTimeout(() => {
@@ -258,11 +265,11 @@ export class SolicitudTraspasoComponent implements AfterViewInit {
     console.log('estado', estado);
     switch (estado) {
       case 'Pendiente':
-        return '#FFD700'; // Darker yellow
+        return '#FFD700'; // Amarillo oscuro
       case 'Aprobada':
         return 'green';
       case 'En Tránsito':
-        return '#FFD700'; // Darker yellow
+        return '#FFD700'; // Amarillo oscuro
       case 'Entrega Total':
         return 'green';
       case 'Rechazada':
@@ -270,7 +277,7 @@ export class SolicitudTraspasoComponent implements AfterViewInit {
       case 'Entrega con Diferencia':
         return 'green';
       case 'Entrega Parcial':
-        return '#FFD700'; // Darker yellow
+        return '#FFD700'; // Amarillo oscuro
       default:
         return '';
     }
@@ -278,9 +285,9 @@ export class SolicitudTraspasoComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.openTrackingModal = (numeroTraspaso: string) => {
-      // Your existing logic...
+      // Tu lógica existente...
       
-      // Add the animation class
+      // Añadir la clase de animación
       const truckElement = document.querySelector('.fas.fa-truck');
       if (truckElement) {
         truckElement.classList.add('truck-animation');

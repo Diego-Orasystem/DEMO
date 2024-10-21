@@ -340,4 +340,24 @@ export class GuiaEntradaComponent implements OnInit {
     }
   }
 
+  showToast(message: string, color: string) {
+    // Lógica para mostrar un toast de confirmación
+    const toast = document.createElement('div');
+    toast.className = 'toast show'; // Asegurarse de que la clase 'show' esté presente
+    toast.innerText = message;
+    toast.style.position = 'fixed';
+    toast.style.top = '20px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.zIndex = '9999'; // Asegurarse de que el toast esté encima de todo
+    toast.style.backgroundColor = color; // Usar el color pasado como parámetro
+    toast.style.color = '#fff';
+    toast.style.padding = '20px'; // Hacer el toast más grande
+    toast.style.fontSize = '1.2em'; // Aumentar el tamaño de la fuente
+    toast.style.borderRadius = '5px';
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      toast.remove();
+    }, 3000);
+  } 
 }

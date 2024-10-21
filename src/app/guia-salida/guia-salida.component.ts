@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr'; // Import ToastrService
 })
 export class GuiaSalidaComponent implements OnInit {
 
-  guiasSalidas: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] }[] = [];
+  guiasSalidas: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, estado: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] }[] = [];
   newEntry = {
     numeroTraspaso: '',
     bodega: '',
@@ -48,6 +48,8 @@ export class GuiaSalidaComponent implements OnInit {
   productos: string[] = ['Escalera', 'Cable', 'Foco'];  
   centrosCosto: { cod: string, des: string }[] = [];
   solicitudTraspasos: { bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] }[] = [];
+
+  showRadioButtons = false;
 
   constructor(private toastr: ToastrService) {}  
 
@@ -162,6 +164,27 @@ export class GuiaSalidaComponent implements OnInit {
       this.newEntry.productos = traspaso.productos || [];
     } else {
       console.log('Traspaso no encontrado.');
+    }
+  }
+
+  toggleRadioButtons() {
+    this.showRadioButtons = !this.showRadioButtons;
+  }
+  
+  aprobarSolicitud(numeroGuia: string) {
+    const entry = this.guiasSalidas.find(entry => entry.numeroGuia === numeroGuia);
+    if (entry) {
+      entry.estado = 'Aprobada';
+      this.saveEntries();
+    }
+    console.log('Aprobar solicitud', numeroGuia);
+  }
+
+  rechazarSolicitud(numeroGuia: string) {
+    const entry = this.guiasSalidas.find(entry => entry.numeroGuia === numeroGuia);
+    if (entry) {
+      entry.estado = 'Rechazada';
+      this.saveEntries();
     }
   }
 }

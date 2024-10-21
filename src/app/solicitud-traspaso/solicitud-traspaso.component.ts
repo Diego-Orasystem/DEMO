@@ -203,7 +203,6 @@ export class SolicitudTraspasoComponent implements AfterViewInit {
   }
 
   openTrackingModal(numeroTraspaso: string): void {
-
     // Filtrar guiasSalida, guiasEntrada y documentoDiferencia
     this.relatedGuiasSalida = this.guiasSalida.filter(guia => guia.numeroTraspaso === numeroTraspaso);
     this.relatedGuiasEntrada = this.guiasEntrada.filter(guia => guia.numeroTraspaso === numeroTraspaso);
@@ -305,14 +304,10 @@ export class SolicitudTraspasoComponent implements AfterViewInit {
   
 
   ngAfterViewInit() {
-    this.openTrackingModal = (numeroTraspaso: string) => {
-      // Tu lógica existente...
-      
-      // Añadir la clase de animación
-      const truckElement = document.querySelector('.fas.fa-truck');
-      if (truckElement) {
-        truckElement.classList.add('truck-animation');
-      }
-    };
+    // If you need to add the animation class, do it here without reassigning openTrackingModal
+    const truckElement = document.querySelector('.fas.fa-truck');
+    if (truckElement) {
+      truckElement.classList.add('truck-animation');
+    }
   }
 }

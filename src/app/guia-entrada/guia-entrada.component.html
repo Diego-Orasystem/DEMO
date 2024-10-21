@@ -168,32 +168,48 @@
           <div class="container">
             <div class="row">
               <div class="col-md-4">
-                <p><strong>Bodega:</strong> {{ selectedEntry?.bodega }}</p>
+                <div style="border: 3px solid #3F5267; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Bodega:</strong> {{ selectedEntry?.bodega }}
+                </div>
               </div>
               <div class="col-md-4">
-                <p><strong>Número de Guía:</strong> {{ selectedEntry?.numeroGuia }}</p>
+                <div style="border: 3px solid #3F5267; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Número de Guía:</strong> {{ selectedEntry?.numeroGuia }}
+                </div>
               </div>
               <div class="col-md-4">
-                <p><strong>Concepto:</strong> {{ selectedEntry?.concepto }}</p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4">
-                <p><strong>Fecha:</strong> {{ selectedEntry?.fecha }}</p>
-              </div>
-              <div class="col-md-4">
-                <p><strong>Descripción:</strong> {{ selectedEntry?.descripcion }}</p>
-              </div>
-              <div class="col-md-4">
-                <p><strong>Tipo de Transacción:</strong> {{ selectedEntry?.tipoTransaccion }}</p>
+                <div style="border: 3px solid #3F5267; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Concepto:</strong> {{ selectedEntry?.concepto }}
+                </div>
               </div>
             </div>
             <div class="row">
               <div class="col-md-4">
-                <p><strong>Bodega Destino:</strong> {{ selectedEntry?.bodegaDestino }}</p>
+                <div style="border: 3px solid #3F5267; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Fecha:</strong> {{ selectedEntry?.fecha }}
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div style="border: 3px solid #3F5267; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Descripción:</strong> {{ selectedEntry?.descripcion }}
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div style="border: 3px solid #3F5267; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Tipo de Transacción:</strong> {{ selectedEntry?.tipoTransaccion }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div style="border: 3px solid #3F5267; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Bodega Destino:</strong> {{ selectedEntry?.bodegaDestino }}
+                </div>
               </div>
               <div class="col-md-8">
-                <p><strong>Centro de Costo:</strong> {{ selectedEntry?.centroCosto }}</p>
+                <div style="border: 3px solid #3F5267; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                  <strong>Centro de Costo:</strong> {{ selectedEntry?.centroCosto }}
+                </div>
               </div>
             </div>
           </div>
@@ -223,18 +239,17 @@
 
 
 
-  
   <!-- Modal for Creating -->
   <div class="modal fade" id="createDocumentoDiferenciaModal" tabindex="-1" role="dialog" aria-labelledby="createDocumentoDiferenciaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content border-with-title rounded">
-        <div class="modal-header">
-          <h5 class="modal-title text-center" id="createGuiaModalLabel">Crear Documento de Diferencia</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <div class="modal-header" style="background-color: #3F5267;">
+          <h5 class="modal-title text-center" id="createGuiaModalLabel" style="color: white;">Crear Documento de Diferencia</h5>
+          <button type="button" class="close" style="color: white;" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="overflow-y: auto; max-height: 80vh;">
           <form (ngSubmit)="addDocumentoDiferencia()" class="form">
             <div class="row">
               <div class="col-md-6">
@@ -284,8 +299,8 @@
             
             <div class="form-group mb-2">
               <label for="productos">Productos</label>
-              <table class="table table-bordered mb-2">
-                <thead>
+              <table class="table table-hover table-striped table-bordered">
+                <thead class="thead-" style="background-color: #343a40 ; color: white;">
                   <tr>
                     <th>Producto</th>
                     <th>Cantidad</th>
@@ -308,7 +323,7 @@
                       <input type="text" [(ngModel)]="product.precioUnitario" class="form-control" placeholder="Precio Unitario" name="precioUnitario-{{i}}" required>
                     </td>
                     <td>
-                      <input type="text" [(ngModel)]="product.Total" class="form-control" placeholder="Total" name="Total-{{i}}" required>
+                      <input type="text" [value]="calculateTotal(+product.cantidad, +product.precioUnitario)" class="form-control" placeholder="Total" name="Total-{{i}}" disabled>
                     </td>
                     <td>
                       <button type="button" class="btn btn-danger btn-sm" (click)="removeProduct(i)">Eliminar</button>
@@ -358,4 +373,3 @@
       </div>
     </div>
   </div>
-  

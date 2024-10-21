@@ -11,16 +11,14 @@ export class SolicitudTraspasoComponent {
   guiasEntrada: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
   guiasSalida: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
  
-relatedGuiasEntrada: any[] = [];
-relatedGuiasSalida: any[] = [];
-relatedDocumentosDiferencia: any[] = [];
-
-
+  relatedGuiasEntrada: any[] = [];
+  relatedGuiasSalida: any[] = [];
+  relatedDocumentosDiferencia: any[] = [];
 
   solicitudTraspaso: { bodega: string, numeroGuia: string, estado: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] }[] = [];
   newEntry = {
     bodega: '',
-    numeroGuia: 'Automatico',
+    numeroGuia: '',
     concepto: 'Traspasos entre bodegas',
     tipoTraslado: 'Traslados Internos',
     estado: 'Pendiente',
@@ -62,6 +60,18 @@ relatedDocumentosDiferencia: any[] = [];
     this.loadTiposTransaccion(); // Load tiposTransaccion on initialization
     this.loadCentrosCosto();
     this.loadModulos();
+    this.setNumeroGuia(); // Set numeroGuia on initialization
+  }
+
+  setNumeroGuia() {
+    const lastEntry = this.solicitudTraspaso.reduce((prev, current) => {
+      const prevNumero = parseInt(prev.numeroGuia, 10);
+      const currentNumero = parseInt(current.numeroGuia, 10);
+      return (isNaN(currentNumero) ? 0 : currentNumero) > (isNaN(prevNumero) ? 0 : prevNumero) ? current : prev;
+    }, { numeroGuia: '0' });
+
+    const lastNumeroGuia = parseInt(lastEntry.numeroGuia, 10);
+    this.newEntry.numeroGuia = isNaN(lastNumeroGuia) ? '0' : (lastNumeroGuia + 1).toString();
   }
 
   addProduct() {
@@ -79,7 +89,7 @@ relatedDocumentosDiferencia: any[] = [];
       this.solicitudTraspaso.push({ ...this.newEntry });
       this.newEntry = {
         bodega: '',
-        numeroGuia: '2',
+        numeroGuia: '',
         concepto: 'Traspasos entre bodegas',
         tipoTraslado: 'Traslados Internos',
         estado: 'Pendiente',
@@ -90,6 +100,7 @@ relatedDocumentosDiferencia: any[] = [];
         centroCosto: '',
         productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
       };
+      this.setNumeroGuia(); // Set numeroGuia after adding entry
       this.saveEntries();
       this.toastr.success('Guía de salida agregada exitosamente!');
     } else {
@@ -163,8 +174,6 @@ relatedDocumentosDiferencia: any[] = [];
     }
   }
 
-
-
   openTrackingModal(numeroTraspaso: string): void {
 
     // Filter guiasSalida, guiasEntrada, and documentoDiferencia
@@ -179,7 +188,5 @@ relatedDocumentosDiferencia: any[] = [];
 
     // Additional logic to display these entries in a modal
   }
-
-
 
 }

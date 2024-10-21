@@ -200,7 +200,7 @@ export class SolicitudTraspasoComponent {
     if (entry) {
       entry.estado = 'Aprobada';
       this.saveEntries();
-      this.showRadioButtons = false; // Dejar de mostrar los botones
+      // this.showRadioButtons = false; // Dejar de mostrar los botones
       this.showToast('Solicitud aprobada exitosamente', 'green'); // Mostrar toast de confirmación
     }
     console.log('Aprobar solicitud', numeroGuia);
@@ -211,7 +211,6 @@ export class SolicitudTraspasoComponent {
     if (entry) {
       entry.estado = 'Rechazada';
       this.saveEntries();
-      this.showRadioButtons = false; // Dejar de mostrar los botones
       this.showToast('Solicitud rechazada exitosamente', 'red'); // Mostrar toast de confirmación
     }
   }

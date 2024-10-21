@@ -1,46 +1,46 @@
 <div class="container mt-4">
     <div class="card shadow-lg rounded">
-      <div class="card-header" style="background-color: #28a745; color: white;">
+      <div class="card-header" style="background-color: #3F5267; color: white;">
         <h2>Solicitud de Traspaso</h2>
       </div>
       <div class="card-body">
-        <button class="btn btn-primary mb-3" data-toggle="modal" style="background-color: grey;" data-target="#createGuiaModal" [style.margin-right.px]="10">Crear Solicitud de Traspaso</button>
+        <button class="btn btn-primary mb-3" data-toggle="modal" style="background-color: rgb(4, 181, 4); margin-right: 10px;" data-target="#createGuiaModal" onmouseover="this.style.backgroundColor='green'" onmouseout="this.style.backgroundColor='rgb(4, 181, 4)'">Crear Solicitud de Traspaso</button>
         <button class="btn btn-warning mb-3" data-toggle="modal" (click)="toggleRadioButtons()">Aprobar Solicitudes de Traspaso</button>
 
         <div class="table-responsive">
-          <table class="table table-hover table-bordered mt-3">
-            <thead class="thead-">
+          <table class="table table-striped table-hover table-bordered mt-3" style="border-color: #343a40;">
+            <thead class="thead-dark" style="border-color: #343a40;">
               <tr>
-                <th>Bodega</th>
-                <th>Número de Guía</th>
-                <th>Concepto</th>
-                <th>Estado</th>
-                <th>Fecha</th>
-                <th>Descripción</th>
-                <th>Tipo de Transacción</th>
-                <th>Bodega Destino</th>
-                <th>Centro de Costo</th>
-                <th>Acciones</th>
+                <th scope="col" style="border-color: #343a40;">Bodega</th>
+                <th scope="col" style="border-color: #343a40;">Número de Guía</th>
+                <th scope="col" style="border-color: #343a40;">Concepto</th>
+                <th scope="col" style="border-color: #343a40;">Estado</th>
+                <th scope="col" style="border-color: #343a40;">Fecha</th>
+                <th scope="col" style="border-color: #343a40;">Descripción</th>
+                <th scope="col" style="border-color: #343a40;">Tipo de Transacción</th>
+                <th scope="col" style="border-color: #343a40;">Bodega Destino</th>
+                <th scope="col" style="border-color: #343a40;">Centro de Costo</th>
+                <th scope="col" style="border-color: #343a40;">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let entry of solicitudTraspaso; let i = index" [ngClass]="{'table-success': i % 2 === 0, 'table-light': i % 2 !== 0}">
-                <td>{{ entry.bodega }}</td>
-                <td>
+              <tr *ngFor="let entry of solicitudTraspaso; let i = index" [ngClass]="{'table-secondary': i % 2 === 0, 'table-light': i % 2 !== 0}" style="border-color: #343a40;">
+                <td style="border-color: #343a40;">{{ entry.bodega }}</td>
+                <td style="border-color: #343a40;">
                   <a href="#" (click)="openDetailModal(entry)" data-toggle="modal" data-target="#detailGuiaModal">{{ entry.numeroGuia }}</a>
                 </td>
-                <td>{{ entry.concepto }}</td>
-                <td>{{ entry.estado }}</td>
-                <td>{{ entry.fecha }}</td>
-                <td>{{ entry.descripcion }}</td>
-                <td>{{ entry.tipoTransaccion }}</td>
-                <td>{{ entry.bodegaDestino }}</td>
-                <td>{{ entry.centroCosto }}</td>
-                <td>
+                <td style="border-color: #343a40;">{{ entry.concepto }}</td>
+                <td style="border-color: #343a40;">{{ entry.estado }}</td>
+                <td style="border-color: #343a40;">{{ entry.fecha }}</td>
+                <td style="border-color: #343a40;">{{ entry.descripcion }}</td>
+                <td style="border-color: #343a40;">{{ entry.tipoTransaccion }}</td>
+                <td style="border-color: #343a40;">{{ entry.bodegaDestino }}</td>
+                <td style="border-color: #343a40;">{{ entry.centroCosto }}</td>
+                <td style="border-color: #343a40;">
                   <div class="d-flex justify-content-between">
                     <div class="d-flex flex-column" *ngIf="!showRadioButtons">
                       <button data-toggle="modal" data-target="#trackingModal" (click)="openTrackingModal(entry.numeroGuia)" class="btn btn-info btn-sm mb-1">Tracking</button>
-                      <button (click)="removeEntry(i)" class="btn btn-danger btn-sm mb-1">Eliminar</button>
+                      <button *ngIf="entry.estado === 'Rechazada'" (click)="removeEntry(i)" class="btn btn-danger btn-sm mb-1">Eliminar</button>
                     </div>
                     <div class="d-flex flex-column" *ngIf="showRadioButtons">
                       <button (click)="aprobarSolicitud(entry.numeroGuia)" class="btn btn-success btn-sm mb-1">Aprobar</button>
@@ -296,7 +296,6 @@
   </div>
   
   
-
    <!-- Modal for Tracking -->
    <div class="modal fade" id="trackingModal" tabindex="-1" role="dialog" aria-labelledby="trackingModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">

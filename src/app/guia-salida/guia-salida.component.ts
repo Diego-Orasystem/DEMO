@@ -15,7 +15,7 @@ export class GuiaSalidaComponent implements OnInit {
     numeroGuia: '',
     concepto: 'Traspasos entre bodegas',
     tipoTraslado: 'Traslados Internos',
-    estado: 'Vigente',
+    estado: 'Pendiente',
     fecha: new Date().toISOString().split('T')[0],
     descripcion: '',
     tipoTransaccion: '',
@@ -78,7 +78,7 @@ export class GuiaSalidaComponent implements OnInit {
         numeroGuia: '',
         concepto: 'Traspasos entre bodegas',
         tipoTraslado: 'Traslados Internos',
-        estado: 'Vigente',
+        estado: 'Pendiente',
         fecha: '',
         descripcion: '',
         tipoTransaccion: '',
@@ -136,7 +136,7 @@ export class GuiaSalidaComponent implements OnInit {
   loadSolicitudTraspasos() {
     const storedSolicitudTraspasos = localStorage.getItem('solicitudTraspaso');
     if (storedSolicitudTraspasos) {
-      this.solicitudTraspasos = JSON.parse(storedSolicitudTraspasos);
+      this.solicitudTraspasos = JSON.parse(storedSolicitudTraspasos).filter((traspaso: any) => traspaso.estado === 'Aprobada');
     }
   }
 

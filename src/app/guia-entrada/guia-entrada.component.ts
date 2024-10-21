@@ -11,7 +11,7 @@ export class GuiaEntradaComponent implements OnInit {
   filteredGuiasSalida: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
   guiaSalidaSeleccionada: any = null;
   documentoDiferencia: { numeroDocumento: string; numeroTraspaso: string; numeroGuiaSalida: string; numeroGuiaEntrada: string; fecha: string; motivo: string; descripcion: string; productos: any }[] = [];
-
+  solicitudTraspaso: any[] = [];
   newDocumentoDiferencia = {
     numeroDocumento: '',
     numeroTraspaso: '',
@@ -68,6 +68,7 @@ export class GuiaEntradaComponent implements OnInit {
     this.loadTiposTransaccion();
     this.loadGuiasSalida();
     this.loadDocumentoDiferencia();
+    this.loadSolicitudTraspaso();
   }
 
   onBodegaChange() {
@@ -169,6 +170,9 @@ export class GuiaEntradaComponent implements OnInit {
     localStorage.setItem('documentoDiferencia', JSON.stringify(this.documentoDiferencia));
   }
 
+  saveSolicitudTraspaso() {
+    localStorage.setItem('solicitudTraspaso', JSON.stringify(this.solicitudTraspaso));
+  }
   loadGuiasSalida() {
     const storedGuiasSalida = localStorage.getItem('guiasSalidas');
     if (storedGuiasSalida) {
@@ -181,6 +185,13 @@ export class GuiaEntradaComponent implements OnInit {
     if (storedDocumentoDiferencia) {
       this.documentoDiferencia = JSON.parse(storedDocumentoDiferencia);
     }
+  }
+  loadSolicitudTraspaso() {
+    const storedSolicitudTraspaso = localStorage.getItem('solicitudTraspaso');
+    if (storedSolicitudTraspaso) {
+      this.solicitudTraspaso = JSON.parse(storedSolicitudTraspaso);
+    }
+    this.actualizarEstadosSolicitudTraspasos(this.solicitudTraspaso);
   }
 
   openDetailModal(entry: any): void {
@@ -272,6 +283,61 @@ export class GuiaEntradaComponent implements OnInit {
   calculateTotalProducto() {
     this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calculate Total
   }
+  actualizarEstadosSolicitudTraspasos(solicitudTraspaso: any[]) {
+    for (const guia of solicitudTraspaso) {
+      console.log('Guía de Solicitud de Traspaso:', guia);
+      const guiasEntrada = this.guiasEntrada.filter(guiaEntrada => guiaEntrada.numeroTraspaso === guia.numeroGuia);
+      console.log('Guias de Entrada encontradas:', guiasEntrada);
+      const documentoDiferencia = this.documentoDiferencia.filter(documento => documento.numeroTraspaso === guia.numeroGuia);
+      console.log('Documento de Diferencia encontrados:', documentoDiferencia);
+     
+    let totalProductosSolicitudTraspaso = 0;
+    for (const producto of guia.productos) {
+      totalProductosSolicitudTraspaso += producto.cantidad;
+    }
 
+    let totalProductosGuiasEntrada = 0;
+    for (const guiaEntrada of guiasEntrada) {
+      for (const producto of guiaEntrada.productos) {
+        totalProductosGuiasEntrada += producto.cantidad;
+      }
+    }
+
+    let totalProductosDocumentosDiferencia = 0;
+    for (const documento of documentoDiferencia) {
+      for (const producto of documento.productos) {
+        totalProductosDocumentosDiferencia += producto.cantidad;
+      }
+    }
+
+    let TotalProductos = totalProductosSolicitudTraspaso - (totalProductosGuiasEntrada - totalProductosDocumentosDiferencia);
+
+
+    if (TotalProductos === 0) {
+        if (totalProductosGuiasEntrada > 0 && totalProductosDocumentosDiferencia > 0) {
+            guia.estado = 'Entrega con Diferencia';
+            console.log('Entrega con Diferencia: Cuadrada con Documentos de Diferencia.');
+        } else {
+            guia.estado = 'Entrega Total';
+            console.log('Entrega Total: Cuadrada sin Diferencias.');
+        }
+    } else {
+        if (totalProductosGuiasEntrada > 0) {
+            guia.estado = 'Entrega Parcial';
+            console.log('Entrega Parcial: Con Diferencias.');
+        }
+        if (totalProductosGuiasEntrada === 0) {
+            guia.estado = 'En Tránsito';
+            console.log('En Tránsito: No se han generado guías de entrada para la solicitud.');
+        }
+    }
+
+    console.log('Total productos en solicitud de traspaso:', totalProductosSolicitudTraspaso);
+    console.log('Total productos en guias de entrada:', totalProductosGuiasEntrada);
+    console.log('Total productos en documentos de diferencia:', totalProductosDocumentosDiferencia);
+    console.log('Total productos:', TotalProductos);
+    this.saveSolicitudTraspaso();
+    }
+  }
 
 }

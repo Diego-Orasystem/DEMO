@@ -138,7 +138,7 @@ export class GuiaSalidaComponent implements OnInit {
   loadSolicitudTraspasos() {
     const storedSolicitudTraspasos = localStorage.getItem('solicitudTraspaso');
     if (storedSolicitudTraspasos) {
-      this.solicitudTraspasos = JSON.parse(storedSolicitudTraspasos).filter((traspaso: any) => traspaso.estado === 'Aprobada');
+      this.solicitudTraspasos = JSON.parse(storedSolicitudTraspasos).filter((traspaso: any) => traspaso.estado != 'Rechazada');
     }
   }
 

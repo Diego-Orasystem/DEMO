@@ -159,22 +159,22 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let product of newEntry.productos; let i = index" [ngClass]="{'table-secondary': i % 2 === 0, 'table-light': i % 2 !== 0}" style="border-color: #343a40;">
-                  <td style="border-color: #343a40;">
+                <tr *ngFor="let product of newEntry.productos; let i = index">
+                  <td>
                     <select [(ngModel)]="product.nombre" class="form-control" name="producto-{{i}}" required>
                       <option *ngFor="let producto of productos" [value]="producto">{{ producto }}</option>
                     </select>
                   </td>
-                  <td style="border-color: #343a40;">
+                  <td>
                     <input type="number" [(ngModel)]="product.cantidad" class="form-control" placeholder="Cantidad" name="cantidad-{{i}}" required>
                   </td>
-                  <td style="border-color: #343a40;">
+                  <td>
                     <input type="text" [(ngModel)]="product.precioUnitario" class="form-control" placeholder="Precio Unitario" name="precioUnitario-{{i}}" required>
                   </td>
-                  <td style="border-color: #343a40;">
-                    <input type="text" [(ngModel)]="product.Total" class="form-control" placeholder="Total" name="Total-{{i}}" required>
+                  <td>
+                    <input type="text" [value]="calculateTotal(+product.cantidad, +product.precioUnitario)" class="form-control" placeholder="Total" name="Total-{{i}}" disabled>
                   </td>
-                  <td style="border-color: #343a40;">
+                  <td>
                     <button type="button" class="btn btn-danger btn-sm" (click)="removeProduct(i)">Eliminar</button>
                   </td>
                 </tr>
@@ -289,11 +289,11 @@
           </div>
           <div class="form-group mb-3">
             <label for="productoCantidad">Cantidad</label>
-            <input type="number" [(ngModel)]="newProduct.cantidad" (input)="calculateTotal()" class="form-control" id="productoCantidad" name="productoCantidad" required>
+            <input type="number" [(ngModel)]="newProduct.cantidad" (input)="calculateTotalProducto()" class="form-control" id="productoCantidad" name="productoCantidad" required>
           </div>
           <div class="form-group mb-3">
             <label for="productoPrecioUnitario">Precio Unitario</label>
-            <input type="text" [(ngModel)]="newProduct.precioUnitario" (input)="calculateTotal()" class="form-control" id="productoPrecioUnitario" name="productoPrecioUnitario" required>
+            <input type="text" [(ngModel)]="newProduct.precioUnitario" (input)="calculateTotalProducto()" class="form-control" id="productoPrecioUnitario" name="productoPrecioUnitario" required>
           </div>
           <div class="form-group mb-3">
             <label for="productoTotal">Total</label>

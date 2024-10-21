@@ -62,9 +62,9 @@ export class GuiaSalidaComponent implements OnInit {
   }
 
   addProduct() {
-    this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); 
-    this.newEntry.productos.push({ ...this.newProduct });  
-    this.newProduct = { nombre: '', cantidad: 0, precioUnitario: '', Total: '' };  
+    this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calculate Total
+    this.newEntry.productos.push({ ...this.newProduct }); // Use newProduct to add product
+    this.newProduct = { nombre: '', cantidad: 0, precioUnitario: '', Total: '' }; // Reset newProduct after adding
   }
 
   removeProduct(index: number) {
@@ -148,8 +148,9 @@ export class GuiaSalidaComponent implements OnInit {
     // Additional logic to handle modal opening
   }
 
-  calculateTotal() {
-    this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calculate Total
+
+  calculateTotal(cantidad: number, precioUnitario: number): number {
+    return cantidad * precioUnitario;
   }
 
   selectTraspaso(numeroTraspaso: string) {
@@ -186,5 +187,8 @@ export class GuiaSalidaComponent implements OnInit {
       entry.estado = 'Rechazada';
       this.saveEntries();
     }
+  }
+  calculateTotalProducto() {
+    this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calculate Total
   }
 }

@@ -282,6 +282,7 @@ export class SolicitudTraspasoComponent implements AfterViewInit {
         return '';
     }
   }
+  
 
   ngAfterViewInit() {
     this.openTrackingModal = (numeroTraspaso: string) => {

@@ -62,9 +62,18 @@ export class GuiaSalidaComponent implements OnInit {
   }
 
   addProduct() {
-    this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calculate Total
-    this.newEntry.productos.push({ ...this.newProduct }); // Use newProduct to add product
-    this.newProduct = { nombre: '', cantidad: 0, precioUnitario: '', Total: '' }; // Reset newProduct after adding
+    if (!this.newProduct.nombre.trim()) {
+      this.showToast('El campo "Nombre" es obligatorio.', 'red');
+    } else if (this.newProduct.cantidad <= 0) {
+      this.showToast('La cantidad debe ser mayor a 0.', 'red');
+    } else if (!this.newProduct.precioUnitario.trim() || isNaN(parseFloat(this.newProduct.precioUnitario))) {
+      this.showToast('El campo "Precio Unitario" es obligatorio y debe ser un número válido.', 'red');
+    } else {
+      this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calcular Total
+      this.newEntry.productos.push({ ...this.newProduct }); // Usar newProduct para agregar producto
+      this.newProduct = { nombre: '', cantidad: 0, precioUnitario: '', Total: '' }; // Reiniciar newProduct después de agregar
+      this.showToast('Producto agregado exitosamente!', 'green');
+    }
   }
 
   removeProduct(index: number) {
@@ -72,7 +81,25 @@ export class GuiaSalidaComponent implements OnInit {
   }
 
   addEntry() {
-    if (this.newEntry.bodega.trim() && this.newEntry.numeroGuia.trim() && this.newEntry.concepto.trim() && this.newEntry.fecha.trim() && this.newEntry.descripcion.trim() && this.newEntry.tipoTransaccion.trim() && this.newEntry.bodegaDestino.trim() && this.newEntry.centroCosto.trim() && this.newEntry.productos.length > 0) {
+    if (!this.newEntry.bodega.trim()) {
+      this.showToast('El campo "Bodega" es obligatorio.', 'red');
+    } else if (!this.newEntry.numeroGuia.trim()) {
+      this.showToast('El campo "Número de Guía" es obligatorio.', 'red');
+    } else if (!this.newEntry.concepto.trim()) {
+      this.showToast('El campo "Concepto" es obligatorio.', 'red');
+    } else if (!this.newEntry.fecha.trim()) {
+      this.showToast('El campo "Fecha" es obligatorio.', 'red');
+    } else if (!this.newEntry.descripcion.trim()) {
+      this.showToast('El campo "Descripción" es obligatorio.', 'red');
+    } else if (!this.newEntry.tipoTransaccion.trim()) {
+      this.showToast('El campo "Tipo de Transacción" es obligatorio.', 'red');
+    } else if (!this.newEntry.bodegaDestino.trim()) {
+      this.showToast('El campo "Bodega Destino" es obligatorio.', 'red');
+    } else if (!this.newEntry.centroCosto.trim()) {
+      this.showToast('El campo "Centro de Costo" es obligatorio.', 'red');
+    } else if (this.newEntry.productos.length === 0) {
+      this.showToast('Debe agregar al menos un producto.', 'red');
+    } else {
       this.guiasSalidas.push({ ...this.newEntry });
       this.newEntry = {
         numeroTraspaso: '',
@@ -89,16 +116,14 @@ export class GuiaSalidaComponent implements OnInit {
         productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
       };
       this.saveEntries();
-      this.toastr.success('Guía de salida agregada exitosamente!');
-    } else {
-      this.toastr.error('Por favor, complete todos los campos y agregue al menos un producto!');
+      this.showToast('Guía de salida agregada exitosamente!', 'green');
     }
   }
 
   removeEntry(index: number) {
     this.guiasSalidas.splice(index, 1);
     this.saveEntries();
-    this.toastr.success('Guía de salida eliminada exitosamente!');
+    this.showToast('Guía de salida eliminada exitosamente!', 'green');
   }
 
   loadEntries() {
@@ -201,14 +226,17 @@ export class GuiaSalidaComponent implements OnInit {
     toast.innerText = message;
     toast.style.position = 'fixed';
     toast.style.top = '20px';
-    toast.style.right = '20px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.zIndex = '9999'; // Asegurarse de que el toast esté encima de todo
     toast.style.backgroundColor = color; // Usar el color pasado como parámetro
     toast.style.color = '#fff';
-    toast.style.padding = '10px';
+    toast.style.padding = '20px'; // Hacer el toast más grande
+    toast.style.fontSize = '1.2em'; // Aumentar el tamaño de la fuente
     toast.style.borderRadius = '5px';
     document.body.appendChild(toast);
     setTimeout(() => {
       toast.remove();
     }, 3000);
-  }
+  } 
 }

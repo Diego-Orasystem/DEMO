@@ -57,9 +57,17 @@ export class DocumentosDiferenciaComponent implements OnInit {
     }
   
     addProduct() {
-      this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); 
-      this.newEntry.productos.push({ ...this.newProduct });  
-      this.newProduct = { nombre: '', cantidad: 0, precioUnitario: '', Total: '' };  
+      if (!this.newProduct.nombre.trim()) {
+        this.showToast('El campo "Nombre" es obligatorio.', 'red');
+      } else if (this.newProduct.cantidad <= 0) {
+        this.showToast('La cantidad debe ser mayor a 0.', 'red');
+      } else if (!this.newProduct.precioUnitario.trim() || isNaN(parseFloat(this.newProduct.precioUnitario))) {
+        this.showToast('El campo "Precio Unitario" es obligatorio y debe ser un número válido.', 'red');
+      } else {
+        this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); 
+        this.newEntry.productos.push({ ...this.newProduct });  
+        this.newProduct = { nombre: '', cantidad: 0, precioUnitario: '', Total: '' };  
+      }
     }
   
     removeProduct(index: number) {
@@ -67,7 +75,19 @@ export class DocumentosDiferenciaComponent implements OnInit {
     }
   
     addEntry() {
-      if (this.newEntry.numeroTraspaso.trim() && this.newEntry.numeroGuiaSalida.trim() && this.newEntry.numeroGuiaEntrada.trim() && this.newEntry.motivo.trim() && this.newEntry.descripcion.trim() && this.newEntry.productos.length > 0) {
+      if (!this.newEntry.numeroTraspaso.trim()) {
+        this.showToast('El campo "Número de Traspaso" es obligatorio.', 'red');
+      } else if (!this.newEntry.numeroGuiaSalida.trim()) {
+        this.showToast('El campo "Número de Guía de Salida" es obligatorio.', 'red');
+      } else if (!this.newEntry.numeroGuiaEntrada.trim()) {
+        this.showToast('El campo "Número de Guía de Entrada" es obligatorio.', 'red');
+      } else if (!this.newEntry.motivo.trim()) {
+        this.showToast('El campo "Motivo" es obligatorio.', 'red');
+      } else if (!this.newEntry.descripcion.trim()) {
+        this.showToast('El campo "Descripción" es obligatorio.', 'red');
+      } else if (this.newEntry.productos.length === 0) {
+        this.showToast('Debe agregar al menos un producto.', 'red');
+      } else {
         const lastEntry = this.documentoDiferencia[this.documentoDiferencia.length - 1];
         let lastNumeroDocumento = lastEntry && lastEntry.numeroDocumento ? parseInt(lastEntry.numeroDocumento, 10) : 0;
         if (isNaN(lastNumeroDocumento)) {
@@ -86,16 +106,14 @@ export class DocumentosDiferenciaComponent implements OnInit {
           productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
         };
         this.saveEntries();
-        this.toastr.success('Documento de diferencia agregado exitosamente!');
-      } else {
-        this.toastr.error('Por favor, complete todos los campos y agregue al menos un producto!');
+        this.showToast('Documento de diferencia agregado exitosamente!', 'green');
       }
     }
   
     removeEntry(index: number) {
       this.documentoDiferencia.splice(index, 1);
       this.saveEntries();
-      this.toastr.success('Documento de diferencia eliminado exitosamente!');
+      this.showToast('Documento de diferencia eliminado exitosamente!', 'green');
     }
   
     loadEntries() {
@@ -105,6 +123,26 @@ export class DocumentosDiferenciaComponent implements OnInit {
         this.documentoDiferencia = JSON.parse(storedEntries);
       }
     }
+    showToast(message: string, color: string) {
+      // Lógica para mostrar un toast de confirmación
+      const toast = document.createElement('div');
+      toast.className = 'toast show'; // Asegurarse de que la clase 'show' esté presente
+      toast.innerText = message;
+      toast.style.position = 'fixed';
+      toast.style.top = '20px';
+      toast.style.left = '50%';
+      toast.style.transform = 'translateX(-50%)';
+      toast.style.zIndex = '9999'; // Asegurarse de que el toast esté encima de todo
+      toast.style.backgroundColor = color; // Usar el color pasado como parámetro
+      toast.style.color = '#fff';
+      toast.style.padding = '20px'; // Hacer el toast más grande
+      toast.style.fontSize = '1.2em'; // Aumentar el tamaño de la fuente
+      toast.style.borderRadius = '5px';
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    } 
   
     loadBodegas() {
       const storedBodegas = localStorage.getItem('bodegas');

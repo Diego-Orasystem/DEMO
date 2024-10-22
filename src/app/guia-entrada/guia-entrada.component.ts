@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-
+import * as $ from 'jquery';
 @Component({
   selector: 'app-guia-entrada',
   templateUrl: './guia-entrada.component.html',
   styleUrls: ['./guia-entrada.component.css']
 })
 export class GuiaEntradaComponent implements OnInit {
+  checkboxGuiaEntrada = false;
   guiasEntrada: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
   guiasSalida: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
   filteredGuiasSalida: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
   guiaSalidaSeleccionada: any = null;
   documentoDiferencia: { numeroDocumento: string; numeroTraspaso: string; numeroGuiaSalida: string; numeroGuiaEntrada: string; fecha: string; motivo: string; descripcion: string; productos: any }[] = [];
   solicitudTraspaso: any[] = [];
+
   newDocumentoDiferencia = {
     numeroDocumento: '',
     numeroTraspaso: '',
@@ -30,12 +32,27 @@ export class GuiaEntradaComponent implements OnInit {
     fecha: new Date().toISOString().split('T')[0],
     descripcion: '',
     tipoTransaccion: '',
-    estado: 'Vigente',
+    estado: 'Pendiente',
     tipoTraslado: 'Traslados Internos',
     bodegaDestino: '',
     centroCosto: '',
     productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
   };
+
+  newGuiaSalida = {
+    numeroTraspaso: '',
+    bodega: '',
+    numeroGuia: '',
+    concepto: 'Traspasos entre bodegas',
+    estado: 'Pendiente',
+    fecha: new Date().toISOString().split('T')[0],
+    descripcion: '',
+    tipoTransaccion: '',
+    bodegaDestino: '',
+    centroCosto: '',
+    productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
+  };
+
   bodegas: string[] = [];
   selectedEntry: {
     numeroTraspaso: string;
@@ -52,7 +69,7 @@ export class GuiaEntradaComponent implements OnInit {
     productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[];
   } | null = null;
   tiposTransaccion: string[] = [];
-  newProduct = { // Added newProduct object
+  newProduct = { 
     nombre: '',
     cantidad: 0,
     precioUnitario: '',
@@ -69,7 +86,10 @@ export class GuiaEntradaComponent implements OnInit {
     this.loadGuiasSalida();
     this.loadDocumentoDiferencia();
     this.loadSolicitudTraspaso();
+
   }
+
+  
 
   onBodegaChange() {
     this.filteredGuiasSalida = this.guiasSalida.filter(guia => guia.bodega === this.newEntry.bodega);
@@ -127,6 +147,7 @@ export class GuiaEntradaComponent implements OnInit {
         productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
       };
       this.saveEntries();
+      this.saveGuiasSalida();
       this.showToast('Guía de entrada agregada exitosamente!', 'green');
     }
   }
@@ -148,7 +169,12 @@ export class GuiaEntradaComponent implements OnInit {
     this.guiasEntrada.splice(index, 1);
     this.saveEntries();
   }
+  
+  saveGuiasSalida() {
+    localStorage.setItem('guiasSalidas', JSON.stringify(this.guiasSalida));
+  }
 
+  
   loadEntries() {
     const storedEntries = localStorage.getItem('guiasEntrada');
     if (storedEntries) {
@@ -182,6 +208,7 @@ export class GuiaEntradaComponent implements OnInit {
   saveSolicitudTraspaso() {
     localStorage.setItem('solicitudTraspaso', JSON.stringify(this.solicitudTraspaso));
   }
+
   loadGuiasSalida() {
     const storedGuiasSalida = localStorage.getItem('guiasSalidas');
     if (storedGuiasSalida) {
@@ -206,7 +233,7 @@ export class GuiaEntradaComponent implements OnInit {
   openDetailModal(entry: any): void {
     this.selectedEntry = entry;
   }
-
+                    
   onNumeroGuiaChange() {
     const selectedGuia = this.filteredGuiasSalida.find(guia => guia.numeroGuia === this.newEntry.numeroGuia);
     if (selectedGuia) {
@@ -368,5 +395,48 @@ export class GuiaEntradaComponent implements OnInit {
     setTimeout(() => {
       toast.remove();
     }, 3000);
-  } 
+  }
+
+  radioButtonChange() {
+    console.log('radioButtonChange', this.checkboxGuiaEntrada);
+    if (this.checkboxGuiaEntrada) {
+      this.newGuiaSalida = { ...this.newEntry, fecha: new Date().toISOString().split('T')[0] };
+      this.guiasSalida.push(this.newGuiaSalida);
+    }
+  }
+
+  calculateSubTotal(): number {
+    return this.newEntry.productos.reduce((acc, product) => acc + (product.cantidad * parseFloat(product.precioUnitario)), 0);
+  }
+  
+  calculateDiscount1(): number {
+    // Implementa la lógica para calcular el descuento 1
+    return 0;
+  }
+  
+  calculateDiscount2(): number {
+    // Implementa la lógica para calcular el descuento 2
+    return 0;
+  }
+  
+  calculateDiscount3(): number {
+    // Implementa la lógica para calcular el descuento 3
+    return 0;
+  }
+  
+  calculateDiscount4(): number {
+    // Implementa la lógica para calcular el descuento 4
+    return 0;
+  }
+  
+  calculateDiscount5(): number {
+    // Implementa la lógica para calcular el descuento 5
+    return 0;
+  }
+  
+  calculateTotalFinal(): number {
+    const subTotal = this.calculateSubTotal();
+    const totalDiscounts = this.calculateDiscount1() + this.calculateDiscount2() + this.calculateDiscount3() + this.calculateDiscount4() + this.calculateDiscount5();
+    return subTotal - totalDiscounts;
+  }
 }

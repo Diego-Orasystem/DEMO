@@ -22,7 +22,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let entry of guiasEntrada; let i = index" [ngClass]="{'table-secondary': i % 2 === 0, 'table-light': i % 2 !== 0}" style="border-color: #343a40;">
-              <td style="border-color: #343a40;">{{ entry.numeroTraspaso }}</td>
+              <td style="border-color: #1f2020;">{{ entry.numeroTraspaso }}</td>
               <td style="border-color: #343a40;">
                   <a href="#" (click)="openDetailModal(entry)" data-toggle="modal" data-target="#detailGuiaModal">{{ entry.numeroGuia }}</a>
               </td>
@@ -89,6 +89,12 @@
                 <input type="text" [(ngModel)]="newEntry.estado" class="form-control" id="estado" name="estado" [disabled]="true" required>
               </div>
               <div class="form-group mb-2">
+                <label for="tipoTransaccion">Tipo de Transacción</label>
+                <select [(ngModel)]="newEntry.tipoTransaccion" class="form-control form-control-sm w-50" id="tipoTransaccion" name="tipoTransaccion" required>
+                  <option *ngFor="let tipo of tiposTransaccion" [value]="tipo">{{ tipo }}</option>
+                </select>
+              </div>
+              <div class="form-group mb-2">
                 <label for="descripcion">Descripción</label>
                 <textarea [(ngModel)]="newEntry.descripcion" class="form-control" id="descripcion" name="descripcion"></textarea>
               </div>
@@ -99,13 +105,17 @@
                 <select [(ngModel)]="newEntry.bodegaDestino" class="form-control" id="bodegaDestino" name="bodegaDestino" required>
                   <option *ngFor="let bodega of bodegas" [value]="bodega">{{ bodega }}</option>
                 </select>
+                <div class="form-check mt-2"></div>
+                  <input type="checkbox" class="form-check-input" id="checkboxBodegaDestino" (change)="radioButtonChange()" [(ngModel)]="checkboxGuiaEntrada" name="checkboxBodegaDestino">
+                  <label class="form-check-label" for="checkboxBodegaDestino">Generar Guía de Salida</label>
+                </div>
               </div>
               <div class="form-group mb-2 border p-2 rounded mt-auto">
                 <label for="centroCosto">Centro de Costo</label>
                 <input type="text" [(ngModel)]="newEntry.centroCosto" class="form-control" id="centroCosto" name="centroCosto" required>
               </div>
             </div>
-          </div>
+            
           <div class="form-group mb-2">
             
             <h2 for="productos">Productos</h2>
@@ -141,13 +151,17 @@
             </table>
             <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#addProductModal">Agregar Producto desde Modal</button>
           </div>
+
+         
           <div class="d-flex justify-content-start mb-2">
             <button type="submit" class="btn btn-success mr-2">Agregar</button>
+            <button class="btn btn-info mb-2 ml-2" data-toggle="modal" data-target="#totalesModal">Mostrar Totales</button>
             <button *ngIf="compareProducts()" type="button" class="btn btn-warning" data-toggle="modal" data-target="#createDocumentoDiferenciaModal" (click)="crearDocumentoDiferencia()">
               Crear Documento Diferencia
             </button>
-          </div>
+          </div>   
         </form>
+        
       </div>
     </div>
   </div>
@@ -292,7 +306,6 @@
                     <label for="descripcion">Descripción</label>
                     <textarea [(ngModel)]="newDocumentoDiferencia.descripcion" class="form-control" id="descripcion" name="descripcion"></textarea>
                   </div>
-                  
                 </div>
               </div>
             </div>
@@ -369,6 +382,30 @@
             </div>
             <button type="submit" class="btn btn-success w-100">Agregar Producto</button>
           </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="totalesModal" tabindex="-1" role="dialog" aria-labelledby="totalesModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #3F5267; color: white;">
+          <h5 class="modal-title" id="totalesModalLabel">Totales de la Guía de Entrada</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" style="color: white;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>SubTotal: {{ calculateSubTotal() | currency }}</p>
+          <p>Descto Total 1: {{ calculateDiscount1() | currency }}</p>
+          <p>Descto Total 2: {{ calculateDiscount2() | currency }}</p>
+          <p>Descto Total 3: {{ calculateDiscount3() | currency }}</p>
+          <p>Descto Total 4: {{ calculateDiscount4() | currency }}</p>
+          <p>Descto Total 5: {{ calculateDiscount5() | currency }}</p>
+          <p>Total Final: {{ calculateTotalFinal() | currency }}</p>
+          <p>Los descuentos a nivel de Totales no afectan a los costos de los productos.</p>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
         </div>
       </div>
     </div>

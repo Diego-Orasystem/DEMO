@@ -7,7 +7,8 @@ import { ToastrService } from 'ngx-toastr'; // Import ToastrService
   styleUrls: ['./guia-salida.component.css']
 })
 export class GuiaSalidaComponent implements OnInit {
-
+  checkboxGuiaSalida = false;
+  guiasEntrada: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: any[] }[] = [];
   guiasSalidas: { numeroTraspaso: string, bodega: string, numeroGuia: string, concepto: string, estado: string, fecha: string, descripcion: string, tipoTransaccion: string, bodegaDestino: string, centroCosto: string, productos: { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] }[] = [];
   newEntry = {
     numeroTraspaso: '',
@@ -22,6 +23,18 @@ export class GuiaSalidaComponent implements OnInit {
     bodegaDestino: '',
     centroCosto: '',
     productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
+  };
+  newGuiaEntrada = {
+    numeroTraspaso: '',
+    bodega: '',
+    numeroGuia: '',
+    concepto: 'Traspasos entre bodegas',
+    fecha: new Date().toISOString().split('T')[0],
+    descripcion: '',
+    tipoTransaccion: '',
+    bodegaDestino: '',
+    centroCosto: '',
+    productos: [] as any[]
   };
   newProduct = { 
     nombre: '',
@@ -58,7 +71,8 @@ export class GuiaSalidaComponent implements OnInit {
     this.loadBodegas();
     this.loadTiposTransaccion();  
     this.loadCentrosCosto();
-    this.loadSolicitudTraspasos(); // Carga las solicitudes de traspaso
+    this.loadSolicitudTraspasos(); 
+    this.loadGuiasEntrada();
   }
 
   addProduct() {
@@ -116,6 +130,7 @@ export class GuiaSalidaComponent implements OnInit {
         productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
       };
       this.saveEntries();
+      this.saveGuiasEntrada();
       this.showToast('Guía de salida agregada exitosamente!', 'green');
     }
   }
@@ -153,6 +168,10 @@ export class GuiaSalidaComponent implements OnInit {
     localStorage.setItem('guiasSalidas', JSON.stringify(this.guiasSalidas));
   }
 
+  saveGuiasEntrada() {
+    localStorage.setItem('guiasEntrada', JSON.stringify(this.guiasEntrada));
+  }
+
   loadCentrosCosto() {
     const storedCentrosCosto = localStorage.getItem('centrosCosto');
     if (storedCentrosCosto) {
@@ -173,6 +192,12 @@ export class GuiaSalidaComponent implements OnInit {
     // Additional logic to handle modal opening
   }
 
+  loadGuiasEntrada() {
+    const storedGuiasEntrada = localStorage.getItem('guiasEntrada');
+    if (storedGuiasEntrada) {
+      this.guiasEntrada = JSON.parse(storedGuiasEntrada);
+    }
+  }
 
   calculateTotal(cantidad: number, precioUnitario: number): number {
     return cantidad * precioUnitario;
@@ -238,5 +263,48 @@ export class GuiaSalidaComponent implements OnInit {
     setTimeout(() => {
       toast.remove();
     }, 3000);
-  } 
+  }
+
+  radioButtonChange() {
+    console.log('radioButtonChange', this.checkboxGuiaSalida);
+    if (this.checkboxGuiaSalida) {
+      this.newGuiaEntrada = { ...this.newEntry, fecha: new Date().toISOString().split('T')[0] };
+      this.guiasEntrada.push(this.newGuiaEntrada);
+    }
+  }
+  calculateSubTotal(): number {
+    return this.newEntry.productos.reduce((acc, product) => acc + (product.cantidad * parseFloat(product.precioUnitario)), 0);
+  }
+  
+  calculateDiscount1(): number {
+    // Implementa la lógica para calcular el descuento 1
+    return 0;
+  }
+  
+  calculateDiscount2(): number {
+    // Implementa la lógica para calcular el descuento 2
+    return 0;
+  }
+  
+  calculateDiscount3(): number {
+    // Implementa la lógica para calcular el descuento 3
+    return 0;
+  }
+  
+  calculateDiscount4(): number {
+    // Implementa la lógica para calcular el descuento 4
+    return 0;
+  }
+  
+  calculateDiscount5(): number {
+    // Implementa la lógica para calcular el descuento 5
+    return 0;
+  }
+  
+  calculateTotalFinal(): number {
+    const subTotal = this.calculateSubTotal();
+    const totalDiscounts = this.calculateDiscount1() + this.calculateDiscount2() + this.calculateDiscount3() + this.calculateDiscount4() + this.calculateDiscount5();
+    return subTotal - totalDiscounts;
+  }
+  
 }

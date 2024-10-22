@@ -21,7 +21,9 @@
             </thead>
             <tbody>
               <tr *ngFor="let entry of documentoDiferencia; let i = index" [ngClass]="{'table-secondary': i % 2 === 0, 'table-light': i % 2 !== 0}" style="border-color: #343a40;">
-                <td style="border-color: #343a40;">{{ entry.numeroDocumento }}</td>
+                <td style="border-color: #343a40;">
+                  <a href="#" (click)="openDetailModal(entry)" data-toggle="modal" data-target="#detailGuiaModal">{{ entry.numeroDocumento }}</a>
+                </td>
                 <td style="border-color: #343a40;">{{ entry.numeroTraspaso }}</td>
                 <td style="border-color: #343a40;">{{ entry.numeroGuiaSalida }}</td>
                 <td style="border-color: #343a40;">{{ entry.numeroGuiaEntrada }}</td>
@@ -144,47 +146,85 @@
     </div>
   </div>
   
-  <!-- Modal for Details -->
-  <div class="modal fade" id="detailGuiaModal" tabindex="-1" role="dialog" aria-labelledby="detailGuiaModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content rounded">
-        <div class="modal-header">
-          <h5 class="modal-title" id="detailGuiaModalLabel">Detalles de la Guía de Salida</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+ <!-- Modal for Details -->
+<div class="modal fade" id="detailGuiaModal" tabindex="-1" role="dialog" aria-labelledby="detailGuiaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #3F5267;">
+        <h5 class="modal-title" id="detailGuiaModalLabel" style="color: white;">Detalles de Documento de Diferencia</h5>
+        <button type="button" class="close" style="color: white;" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <br>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <div style="border: 3px solid #3F5267; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                <strong>Número de Documento:</strong> {{ selectedEntry?.numeroDocumento }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div style="border: 3px solid #3F5267; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                <strong>Número de Traspaso:</strong> {{ selectedEntry?.numeroTraspaso }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div style="border: 3px solid #3F5267; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                <strong>Número de Guía de Salida:</strong> {{ selectedEntry?.numeroGuiaSalida }}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div style="border: 3px solid #3F5267; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                <strong>Número de Guía de Entrada:</strong> {{ selectedEntry?.numeroGuiaEntrada }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div style="border: 3px solid #3F5267; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                <strong>Fecha:</strong> {{ selectedEntry?.fecha }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div style="border: 3px solid #3F5267; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                <strong>Motivo:</strong> {{ selectedEntry?.motivo }}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div style="border: 3px solid #3F5267; border-radius: 4px; padding: 5px; margin: 5px 0;">
+                <strong>Descripción:</strong> {{ selectedEntry?.descripcion }}
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="modal-body">
-          <p><strong>Número de Documento:</strong> {{ selectedEntry?.numeroDocumento }}</p>
-          <p><strong>Número de Traspaso:</strong> {{ selectedEntry?.numeroTraspaso }}</p>
-          <p><strong>Número de Guía de Salida:</strong> {{ selectedEntry?.numeroGuiaSalida }}</p>
-          <p><strong>Número de Guía de Entrada:</strong> {{ selectedEntry?.numeroGuiaEntrada }}</p>
-          <p><strong>Fecha:</strong> {{ selectedEntry?.fecha }}</p>
-          <p><strong>Motivo:</strong> {{ selectedEntry?.motivo }}</p>
-          <p><strong>Descripción:</strong> {{ selectedEntry?.descripcion }}</p>
-          <h5>Productos:</h5>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio Unitario</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let product of selectedEntry?.productos">
-                <td>{{ product.nombre }}</td>
-                <td>{{ product.cantidad }}</td>
-                <td>{{ product.precioUnitario }}</td>
-                <td>{{ product.Total }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <br>
+        <h5>Productos:</h5>
+        <table class="table table-hover table-striped table-bordered">
+          <thead class="thead-" style="background-color: #343a40; color: white;">
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio Unitario</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of selectedEntry?.productos">
+              <td>{{ product.nombre }}</td>
+              <td>{{ product.cantidad }}</td>
+              <td>{{ product.precioUnitario }}</td>
+              <td>{{ product.Total }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
+</div>
   <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
       <div class="modal-content rounded shadow-lg">

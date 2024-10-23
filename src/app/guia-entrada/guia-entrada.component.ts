@@ -97,11 +97,11 @@ export class GuiaEntradaComponent implements OnInit {
 
   addProduct() {
     if (!this.newProduct.nombre.trim()) {
-      this.showToast('El campo "Nombre" es obligatorio.', 'red');
+      //this.showToast('El campo "Nombre" es obligatorio.', 'red');
     } else if (this.newProduct.cantidad <= 0) {
-      this.showToast('La cantidad debe ser mayor a 0.', 'red');
+      //this.showToast('La cantidad debe ser mayor a 0.', 'red');
     } else if (!this.newProduct.precioUnitario.trim() || isNaN(parseFloat(this.newProduct.precioUnitario))) {
-      this.showToast('El campo "Precio Unitario" es obligatorio y debe ser un número válido.', 'red');
+      //this.showToast('El campo "Precio Unitario" es obligatorio y debe ser un número válido.', 'red');
     } else {
       this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calcular Total
       this.newEntry.productos.push({ ...this.newProduct }); // Usar newProduct para agregar producto
@@ -115,21 +115,21 @@ export class GuiaEntradaComponent implements OnInit {
 
   addEntry() {
     if (!this.newEntry.bodega.trim()) {
-      this.showToast('El campo "Bodega" es obligatorio.', 'red');
+      ////this.showToast('El campo "Bodega" es obligatorio.', 'red');
     } else if (!this.newEntry.numeroGuia.trim()) {
-      this.showToast('El campo "Número de Guía" es obligatorio.', 'red');
+      //this.showToast('El campo "Número de Guía" es obligatorio.', 'red');
     } else if (!this.newEntry.concepto.trim()) {
-      this.showToast('El campo "Concepto" es obligatorio.', 'red');
+      //this.showToast('El campo "Concepto" es obligatorio.', 'red');
     } else if (!this.newEntry.fecha.trim()) {
-      this.showToast('El campo "Fecha" es obligatorio.', 'red');
+      //this.showToast('El campo "Fecha" es obligatorio.', 'red');
     } else if (!this.newEntry.descripcion.trim()) {
-      this.showToast('El campo "Descripción" es obligatorio.', 'red');
+      //this.showToast('El campo "Descripción" es obligatorio.', 'red');
     } else if (!this.newEntry.bodegaDestino.trim()) {
-      this.showToast('El campo "Bodega Destino" es obligatorio.', 'red');
+      //this.showToast('El campo "Bodega Destino" es obligatorio.', 'red');
     } else if (!this.newEntry.centroCosto.trim()) {
-      this.showToast('El campo "Centro de Costo" es obligatorio.', 'red');
+      //this.showToast('El campo "Centro de Costo" es obligatorio.', 'red');
     } else if (this.newEntry.productos.length === 0) {
-      this.showToast('Debe agregar al menos un producto.', 'red');
+      //this.showToast('Debe agregar al menos un producto.', 'red');
     } else {
       this.guiasEntrada.push({ ...this.newEntry });
       this.newEntry = {
@@ -148,7 +148,7 @@ export class GuiaEntradaComponent implements OnInit {
       };
       this.saveEntries();
       this.saveGuiasSalida();
-      this.showToast('Guía de entrada agregada exitosamente!', 'green');
+      //this.showToast('Guía de entrada agregada exitosamente!', 'green');
     }
   }
   addDocumentoDiferencia() {

@@ -77,16 +77,16 @@ export class GuiaSalidaComponent implements OnInit {
 
   addProduct() {
     if (!this.newProduct.nombre.trim()) {
-      this.showToast('El campo "Nombre" es obligatorio.', 'red');
+      //this.showToast('El campo "Nombre" es obligatorio.', 'red');
     } else if (this.newProduct.cantidad <= 0) {
-      this.showToast('La cantidad debe ser mayor a 0.', 'red');
+      //this.showToast('La cantidad debe ser mayor a 0.', 'red');
     } else if (!this.newProduct.precioUnitario.trim() || isNaN(parseFloat(this.newProduct.precioUnitario))) {
-      this.showToast('El campo "Precio Unitario" es obligatorio y debe ser un número válido.', 'red');
+      //this.showToast('El campo "Precio Unitario" es obligatorio y debe ser un número válido.', 'red');
     } else {
       this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); // Calcular Total
       this.newEntry.productos.push({ ...this.newProduct }); // Usar newProduct para agregar producto
       this.newProduct = { nombre: '', cantidad: 0, precioUnitario: '', Total: '' }; // Reiniciar newProduct después de agregar
-      this.showToast('Producto agregado exitosamente!', 'green');
+      //this.showToast('Producto agregado exitosamente!', 'green');
     }
   }
 
@@ -96,23 +96,23 @@ export class GuiaSalidaComponent implements OnInit {
 
   addEntry() {
     if (!this.newEntry.bodega.trim()) {
-      this.showToast('El campo "Bodega" es obligatorio.', 'red');
+      //this.showToast('El campo "Bodega" es obligatorio.', 'red');
     } else if (!this.newEntry.numeroGuia.trim()) {
-      this.showToast('El campo "Número de Guía" es obligatorio.', 'red');
+      //this.showToast('El campo "Número de Guía" es obligatorio.', 'red');
     } else if (!this.newEntry.concepto.trim()) {
-      this.showToast('El campo "Concepto" es obligatorio.', 'red');
+      //this.showToast('El campo "Concepto" es obligatorio.', 'red');
     } else if (!this.newEntry.fecha.trim()) {
-      this.showToast('El campo "Fecha" es obligatorio.', 'red');
+      //this.showToast('El campo "Fecha" es obligatorio.', 'red');
     } else if (!this.newEntry.descripcion.trim()) {
-      this.showToast('El campo "Descripción" es obligatorio.', 'red');
+      //this.showToast('El campo "Descripción" es obligatorio.', 'red');
     } else if (!this.newEntry.tipoTransaccion.trim()) {
-      this.showToast('El campo "Tipo de Transacción" es obligatorio.', 'red');
+      //this.showToast('El campo "Tipo de Transacción" es obligatorio.', 'red');
     } else if (!this.newEntry.bodegaDestino.trim()) {
-      this.showToast('El campo "Bodega Destino" es obligatorio.', 'red');
+      //this.showToast('El campo "Bodega Destino" es obligatorio.', 'red');
     } else if (!this.newEntry.centroCosto.trim()) {
-      this.showToast('El campo "Centro de Costo" es obligatorio.', 'red');
+      //this.showToast('El campo "Centro de Costo" es obligatorio.', 'red');
     } else if (this.newEntry.productos.length === 0) {
-      this.showToast('Debe agregar al menos un producto.', 'red');
+      //this.showToast('Debe agregar al menos un producto.', 'red');
     } else {
       this.guiasSalidas.push({ ...this.newEntry });
       this.newEntry = {
@@ -131,14 +131,14 @@ export class GuiaSalidaComponent implements OnInit {
       };
       this.saveEntries();
       this.saveGuiasEntrada();
-      this.showToast('Guía de salida agregada exitosamente!', 'green');
+      //this.showToast('Guía de salida agregada exitosamente!', 'green');
     }
   }
 
   removeEntry(index: number) {
     this.guiasSalidas.splice(index, 1);
     this.saveEntries();
-    this.showToast('Guía de salida eliminada exitosamente!', 'green');
+    //this.showToast('Guía de salida eliminada exitosamente!', 'green');
   }
 
   loadEntries() {
@@ -226,7 +226,7 @@ export class GuiaSalidaComponent implements OnInit {
     if (entry) {
       entry.estado = 'Aprobada';
       this.saveEntries();
-      this.showToast('Solicitud aprobada exitosamente', 'green'); // Mostrar toast de confirmación
+      //this.showToast('Solicitud aprobada exitosamente', 'green'); // Mostrar toast de confirmación
     }
     console.log('Aprobar solicitud', numeroGuia);
   }
@@ -236,7 +236,7 @@ export class GuiaSalidaComponent implements OnInit {
     if (entry) {
       entry.estado = 'Rechazada';
       this.saveEntries();
-      this.showToast('Solicitud rechazada exitosamente', 'red'); // Mostrar toast de confirmación
+      //this.showToast('Solicitud rechazada exitosamente', 'red'); // Mostrar toast de confirmación
     }
   }
 

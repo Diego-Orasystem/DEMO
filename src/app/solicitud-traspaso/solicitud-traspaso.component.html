@@ -40,6 +40,7 @@
                   <div class="d-flex justify-content-between">
                     <div class="d-flex flex-column" *ngIf="!showRadioButtons">
                       <button data-toggle="modal" (click)="openDetailModal(entry)" data-target="#trackingModal" (click)="openTrackingModal(entry.numeroGuia)" class="btn btn-info btn-sm mb-1">Tracking</button>
+                      <button data-toggle="modal" data-target="#totalesModal" class="btn btn-secondary btn-sm mb-1">Totales</button>
                       <button *ngIf="entry.estado === 'Rechazada'" (click)="removeEntry(i)" class="btn btn-danger btn-sm mb-1">Eliminar</button>
                     </div>
                     <div class="d-flex flex-column" *ngIf="showRadioButtons">
@@ -55,6 +56,18 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="totalesModal" tabindex="-1" role="dialog" aria-labelledby="totalesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <body>
+            <h5 class="modal-title" id="totalesModalLabel">Totales</h5> 
+          </body>
+        </div>
+      </div>
+    </div>
+    </div>
   
   <!-- Modal for Creating -->
   <div class="modal fade" id="createGuiaModal" tabindex="-1" role="dialog" aria-labelledby="createGuiaModalLabel" aria-hidden="true">

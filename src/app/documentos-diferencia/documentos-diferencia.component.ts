@@ -58,11 +58,11 @@ export class DocumentosDiferenciaComponent implements OnInit {
   
     addProduct() {
       if (!this.newProduct.nombre.trim()) {
-        this.showToast('El campo "Nombre" es obligatorio.', 'red');
+        //this.showToast('El campo "Nombre" es obligatorio.', 'red');
       } else if (this.newProduct.cantidad <= 0) {
-        this.showToast('La cantidad debe ser mayor a 0.', 'red');
+        //this.showToast('La cantidad debe ser mayor a 0.', 'red');
       } else if (!this.newProduct.precioUnitario.trim() || isNaN(parseFloat(this.newProduct.precioUnitario))) {
-        this.showToast('El campo "Precio Unitario" es obligatorio y debe ser un número válido.', 'red');
+        //this.showToast('El campo "Precio Unitario" es obligatorio y debe ser un número válido.', 'red');
       } else {
         this.newProduct.Total = (this.newProduct.cantidad * parseFloat(this.newProduct.precioUnitario)).toFixed(0); 
         this.newEntry.productos.push({ ...this.newProduct });  
@@ -76,17 +76,17 @@ export class DocumentosDiferenciaComponent implements OnInit {
   
     addEntry() {
       if (!this.newEntry.numeroTraspaso.trim()) {
-        this.showToast('El campo "Número de Traspaso" es obligatorio.', 'red');
+        //this.showToast('El campo "Número de Traspaso" es obligatorio.', 'red');
       } else if (!this.newEntry.numeroGuiaSalida.trim()) {
-        this.showToast('El campo "Número de Guía de Salida" es obligatorio.', 'red');
+        //this.showToast('El campo "Número de Guía de Salida" es obligatorio.', 'red');
       } else if (!this.newEntry.numeroGuiaEntrada.trim()) {
-        this.showToast('El campo "Número de Guía de Entrada" es obligatorio.', 'red');
+        //this.showToast('El campo "Número de Guía de Entrada" es obligatorio.', 'red');
       } else if (!this.newEntry.motivo.trim()) {
-        this.showToast('El campo "Motivo" es obligatorio.', 'red');
+        //this.showToast('El campo "Motivo" es obligatorio.', 'red');
       } else if (!this.newEntry.descripcion.trim()) {
-        this.showToast('El campo "Descripción" es obligatorio.', 'red');
+        //this.showToast('El campo "Descripción" es obligatorio.', 'red');
       } else if (this.newEntry.productos.length === 0) {
-        this.showToast('Debe agregar al menos un producto.', 'red');
+        //this.showToast('Debe agregar al menos un producto.', 'red');
       } else {
         const lastEntry = this.documentoDiferencia[this.documentoDiferencia.length - 1];
         let lastNumeroDocumento = lastEntry && lastEntry.numeroDocumento ? parseInt(lastEntry.numeroDocumento, 10) : 0;
@@ -106,14 +106,14 @@ export class DocumentosDiferenciaComponent implements OnInit {
           productos: [] as { nombre: string; cantidad: number; precioUnitario: string; Total: string }[] // Explicitly define the type
         };
         this.saveEntries();
-        this.showToast('Documento de diferencia agregado exitosamente!', 'green');
+        //this.showToast('Documento de diferencia agregado exitosamente!', 'green');
       }
     }
   
     removeEntry(index: number) {
       this.documentoDiferencia.splice(index, 1);
       this.saveEntries();
-      this.showToast('Documento de diferencia eliminado exitosamente!', 'green');
+      //this.showToast('Documento de diferencia eliminado exitosamente!', 'green');
     }
   
     loadEntries() {
@@ -219,5 +219,40 @@ export class DocumentosDiferenciaComponent implements OnInit {
       } else {
         console.log('Traspaso no encontrado.');
       }
+    }
+
+    calculateSubTotal(): number {
+      return this.newEntry.productos.reduce((acc, product) => acc + (product.cantidad * parseFloat(product.precioUnitario)), 0);
+    }
+    
+    calculateDiscount1(): number {
+      // Implementa la lógica para calcular el descuento 1
+      return 0;
+    }
+    
+    calculateDiscount2(): number {
+      // Implementa la lógica para calcular el descuento 2
+      return 0;
+    }
+    
+    calculateDiscount3(): number {
+      // Implementa la lógica para calcular el descuento 3
+      return 0;
+    }
+    
+    calculateDiscount4(): number {
+      // Implementa la lógica para calcular el descuento 4
+      return 0;
+    }
+    
+    calculateDiscount5(): number {
+      // Implementa la lógica para calcular el descuento 5
+      return 0;
+    }
+    
+    calculateTotalFinal(): number {
+      const subTotal = this.calculateSubTotal();
+      const totalDiscounts = this.calculateDiscount1() + this.calculateDiscount2() + this.calculateDiscount3() + this.calculateDiscount4() + this.calculateDiscount5();
+      return subTotal - totalDiscounts;
     }
 }

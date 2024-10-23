@@ -139,15 +139,54 @@
               </table>
               <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#addProductModal">Agregar Producto desde Modal</button>
             </div>
-            <button type="submit" class="btn btn-success mb-2">Agregar</button>
+            <div class="d-flex justify-content-start mb-2">
+              <button type="submit" class="btn btn-success mr-2">Agregar</button>
+              <button class="btn btn-info" data-toggle="modal" data-target="#totalesModal">Mostrar Totales</button>
+            </div>
           </form>
         </div>
       </div>
     </div>
   </div>
-  
+
+  <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content rounded shadow-lg">
+        <div class="modal-header bg-primary text-white" style="background-color: #3F5267!important;">
+          <h5 class="modal-title" id="addProductModalLabel">Agregar Producto</h5>
+          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="addProduct()" class="form">
+            <div class="form-group mb-2">
+              <label for="productoNombre">Nombre del Producto</label>
+              <select [(ngModel)]="newProduct.nombre" class="form-control" id="productoNombre" name="productoNombre" required>
+                <option *ngFor="let producto of productos" [value]="producto">{{ producto }}</option>
+              </select>
+            </div>
+            <div class="form-group mb-2">
+              <label for="productoCantidad">Cantidad</label>
+              <input type="number" [(ngModel)]="newProduct.cantidad" (input)="calculateTotal()" class="form-control" id="productoCantidad" name="productoCantidad" required>
+            </div>
+            <div class="form-group mb-2">
+              <label for="productoPrecioUnitario">Precio Unitario</label>
+              <input type="text" [(ngModel)]="newProduct.precioUnitario" (input)="calculateTotal()" class="form-control" id="productoPrecioUnitario" name="productoPrecioUnitario" required>
+            </div>
+            <div class="form-group mb-2">
+              <label for="productoTotal">Total</label>
+              <input type="text" [value]="newProduct.Total | number:'1.0-0'" class="form-control" id="productoTotal" name="productoTotal" readonly>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Agregar Producto</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
  <!-- Modal for Details -->
-<div class="modal fade" id="detailGuiaModal" tabindex="-1" role="dialog" aria-labelledby="detailGuiaModalLabel" aria-hidden="true">
+ <div class="modal fade" id="detailGuiaModal" tabindex="-1" role="dialog" aria-labelledby="detailGuiaModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header" style="background-color: #3F5267;">
@@ -225,39 +264,32 @@
     </div>
   </div>
 </div>
-  <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+
+  <div class="modal fade" id="totalesModal" tabindex="-1" role="dialog" aria-labelledby="totalesModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <div class="modal-content rounded shadow-lg">
-        <div class="modal-header bg-primary text-white" style="background-color: #3F5267!important;">
-          <h5 class="modal-title" id="addProductModalLabel">Agregar Producto</h5>
-          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form (ngSubmit)="addProduct()" class="form">
-            <div class="form-group mb-2">
-              <label for="productoNombre">Nombre del Producto</label>
-              <select [(ngModel)]="newProduct.nombre" class="form-control" id="productoNombre" name="productoNombre" required>
-                <option *ngFor="let producto of productos" [value]="producto">{{ producto }}</option>
-              </select>
-            </div>
-            <div class="form-group mb-2">
-              <label for="productoCantidad">Cantidad</label>
-              <input type="number" [(ngModel)]="newProduct.cantidad" (input)="calculateTotal()" class="form-control" id="productoCantidad" name="productoCantidad" required>
-            </div>
-            <div class="form-group mb-2">
-              <label for="productoPrecioUnitario">Precio Unitario</label>
-              <input type="text" [(ngModel)]="newProduct.precioUnitario" (input)="calculateTotal()" class="form-control" id="productoPrecioUnitario" name="productoPrecioUnitario" required>
-            </div>
-            <div class="form-group mb-2">
-              <label for="productoTotal">Total</label>
-              <input type="text" [value]="newProduct.Total | number:'1.0-0'" class="form-control" id="productoTotal" name="productoTotal" readonly>
-            </div>
-            <button type="submit" class="btn btn-success w-100">Agregar Producto</button>
-          </form>
-        </div>
+      <div class="modal-content">
+      <div class="modal-header" style="background-color: #3F5267; color: white;">
+        <h5 class="modal-title" id="totalesModalLabel">Totales de la Guía de Entrada</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" style="color: white;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>SubTotal: {{ calculateSubTotal() | currency }}</p>
+        <p>Descto Total 1: {{ calculateDiscount1() | currency }}</p>
+        <p>Descto Total 2: {{ calculateDiscount2() | currency }}</p>
+        <p>Descto Total 3: {{ calculateDiscount3() | currency }}</p>
+        <p>Descto Total 4: {{ calculateDiscount4() | currency }}</p>
+        <p>Descto Total 5: {{ calculateDiscount5() | currency }}</p>
+        <p>Total Final: {{ calculateTotalFinal() | currency }}</p>
+        <p>Los descuentos a nivel de Totales no afectan a los costos de los productos.</p>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
       </div>
     </div>
   </div>
+  
+
+
+
+  
   
